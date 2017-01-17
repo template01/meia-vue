@@ -8,7 +8,15 @@ export default {
 </script>
 
 <style>
+body,html{
+  margin:0;
+}
+
+*{
+  box-sizing: border-box;
+}
+
 #app {
-  background: beige
+  margin:0;
 }
 </style>

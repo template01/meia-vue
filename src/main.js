@@ -30,7 +30,7 @@ new Vue({
   },
   template: `
     <div id="app">
-      <headermenu></headermenu>
+      <!--<headermenu></headermenu>-->
       <router-view></router-view>
     </div>
   `,
