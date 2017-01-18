@@ -1,17 +1,17 @@
 
 <template>
   <div>
-    <Listposts></Listposts>
+    <Getgradyears></Getgradyears>
   </div>
 </template>
 
 <script>
-import Listposts from './Listposts'
+import Getgradyears from './Getgradyears'
 
 
 export default {
   components: {
-    Listposts,
+    Getgradyears,
   },
 
   name: 'indexpage',
@@ -27,5 +27,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+
 </style>

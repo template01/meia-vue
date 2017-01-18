@@ -7,6 +7,7 @@
 <script>
   import Listposts from './Listposts'
   import Singlepostindex from './Singlepostindex'
+  import fitText from '../assets/fittext'
 
   export default {
     components: {
@@ -16,16 +17,16 @@
       return {
         checked: true,
         projects: [],
-        // projectsChecked: [false, false, false, false]
       }
     },
     created: function() {
-      console.log('yesa')
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts').then(function(response) {
-        console.log(response)
+      if(this.projects.length === 0){
+        this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts').then(function(response) {
+          console.log(response)
+          this.projects = response.body
+        })
+      }
 
-        this.projects = response.body
-      })
     },
     methods: {
       toggleCheckParent: function(index) {
@@ -34,8 +35,6 @@
       },
       toggleChecked: function(index) {
         return this.projectsChecked[index] = !this.projectsChecked[index]
-
-
       }
     }
   }
