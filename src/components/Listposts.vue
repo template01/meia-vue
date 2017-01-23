@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="slideIn listSingle">
     <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
   </div>
 </template>
@@ -10,6 +10,7 @@
   import fitText from '../assets/fittext'
 
   export default {
+    props:['categorylink'],
     components: {
       Listposts,Singlepostindex,
     },
@@ -21,8 +22,8 @@
     },
     created: function() {
       if(this.projects.length === 0){
-        this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts').then(function(response) {
-          console.log(response)
+        this.$http.get(this.categorylink).then(function(response) {
+          // console.log(response)
           this.projects = response.body
         })
       }
@@ -30,7 +31,7 @@
     },
     methods: {
       toggleCheckParent: function(index) {
-        console.log('check parent' + index)
+        // console.log('check parent' + index)
         this.$set(this.projectsChecked, index, this.toggleChecked(index))
       },
       toggleChecked: function(index) {
@@ -43,5 +44,15 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+/*
+  .listSingle{
 
+  	transition-property: all;
+  	transition-duration: .5s;
+  	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+  .slideIn{
+    margin-left: -100vw
+  }
+*/
 </style>
