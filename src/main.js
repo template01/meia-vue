@@ -3,9 +3,12 @@ import VueRouter from 'vue-router'
 import vueResource from 'vue-resource'
 import App from './App'
 
+import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
+// import swiper from '../node_modules/swiper/dist/css/swiper.min.css'
 import Hello from './components/Hello'
 import Indexpage from './components/Indexpage'
 import Headermenu from './components/Headermenu'
+
 
 
 
@@ -23,6 +26,20 @@ const router = new VueRouter({
 });
 
 /* eslint-disable no-new */
+// 
+// var vm = new Vue({
+//     methods: {
+//         foo: function() {
+//             console.log('bar');
+//         }
+//     }
+// });
+//
+// vm.foo(); // prints 'bar'
+
+
+
+
 new Vue({
   router,
   components: {
@@ -33,5 +50,5 @@ new Vue({
       <!--<headermenu></headermenu>-->
       <router-view></router-view>
     </div>
-  `,
+  `
 }).$mount('#app')

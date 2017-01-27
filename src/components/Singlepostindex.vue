@@ -79,6 +79,8 @@ export default {
 }
 
 .single {
+    width: calc(100% - 40px);
+
     h1 {
         margin: 0;
         border-top: 1px solid black;

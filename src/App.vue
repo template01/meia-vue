@@ -7,6 +7,10 @@ export default {
 }
 </script>
 
+
+<style src="../node_modules/swiper/dist/css/swiper.min.css"/>
+
+
 <style>
 body,html{
   margin:0;

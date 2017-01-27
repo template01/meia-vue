@@ -11,7 +11,8 @@
         <span>{{year.name}}</span>
         <span v-on:click="clickNext(index)" class="right">+</span>
       </div>
-      <Listposts v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
+
+      <Listposts v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
     </div>
   </div>
   <!-- <h1>hello</h1> -->
@@ -75,12 +76,6 @@ export default {
     display: none;
 }
 
-.slideOutPosts{
-  margin-left: -100vw;
-  background: red;
-  display: none;
-}
-
 .yearSingle{
 
   .yearNavigation {
@@ -99,14 +94,9 @@ export default {
         visibility: hidden;
       }
     }
+    // display: none;
   }
-  &:first-of-type{
-    .yearNavigation {
-      .left{
-        visibility: hidden;
-      }
-    }
-  }
+
 }
 
 
