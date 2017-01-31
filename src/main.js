@@ -26,7 +26,7 @@ const router = new VueRouter({
 });
 
 /* eslint-disable no-new */
-// 
+//
 // var vm = new Vue({
 //     methods: {
 //         foo: function() {
@@ -40,7 +40,7 @@ const router = new VueRouter({
 
 
 
-new Vue({
+var ass = new Vue({
   router,
   components: {
     Headermenu

@@ -3,7 +3,7 @@
   <div v-show="showImages" class="listpostsImages">
     <div class="listpostsImagesInner">
       <!-- {{this.featuredimages[0]}} -->
-      <div  v-bind:class="'swiper-container'+this.categoryyear" class="swiper-container">
+      <div v-bind:class="'swiper-container'+this.categoryyear" class="swiper-container">
         <div class="swiper-wrapper">
 
           <div v-bind:class="'swiper-slide'+categoryyear" class="swiper-slide" v-for="(featuredimage, index) in featuredimages">
@@ -28,11 +28,12 @@
 <script>
 export default {
   name: 'listpostsImages',
-  props: ['categoryyear','featuredimages'],
+  props: ['categoryyear', 'featuredimages'],
   data() {
     return {
       showImages: false,
-      swiperObject:{}
+      swiperObject: {},
+      sliderHeight: 0
     }
   },
   methods: {
@@ -40,11 +41,14 @@ export default {
       // alert('expaaand')
       this.$emit('emittoggleHideSinglePosts')
       this.showImages = !this.showImages
-      if(this.showImages){
+      if (this.showImages) {
         console.log('gio')
         var savedThis = this
+
         // savedThis.runSlider()
-        setTimeout(function(){savedThis.runSlider() }, 1);
+        setTimeout(function() {
+          savedThis.runSlider()
+        }, 1);
 
       }
 
@@ -55,19 +59,51 @@ export default {
     },
 
     runSlider: function() {
-      if(Object.keys(this.swiperObject).length===0){
-        this.swiperObject = new Swiper('.swiper-container'+this.categoryyear, {
-          pagination: '.swiper-pagination'+this.categoryyear,
+      var vm = this
+
+
+      if (Object.keys(this.swiperObject).length === 0) {
+        this.swiperObject = new Swiper('.swiper-container' + this.categoryyear, {
+          pagination: '.swiper-pagination' + this.categoryyear,
           paginationClickable: true,
-          autoHeight: true
+          autoHeight: true,
+          onInit: function(swiper) {
+            var containerHeight = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
+            vm.$emit('emitSetImageHeight', containerHeight)
+          },
+          onTransitionEnd: function(swiper) {
+            var containerHeight = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
+            vm.$emit('emitSetImageHeight', containerHeight)
+          }
         });
+      } else {
+        var containerHeightInit = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
+        vm.$emit('emitSetImageHeight', containerHeightInit)
+
       }
     }
 
   },
 
+
+  //   watch: {
+  //   sliderHeight: function (sliderHeight) {
+  //     console.log(sliderHeight)
+  //     this.$emit('emitSetListHeight')
+  //     // this.$emit('emitSetListHeight',[1, 100])
+  //     // this.$emit('emitSetListHeight',[2, 100])
+  //     // this.$emit('emitSetListHeight',[3, 100])
+  //
+  //   },
+  //   setheight: function (setheight) {
+  //     console.log('change')
+  //
+  //   }
+  //
+  // },
+
   // mounted: function() {
-    // this.runSlider()
+  // this.runSlider()
   // }
 
 
@@ -77,7 +113,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .listpostsImages {
-  width: calc(100% - 40px);
+    width: calc(100% - 40px);
     .listpostsImagesInner {
         // background: red;
         border-bottom: 1px solid black;
@@ -128,5 +164,4 @@ export default {
     line-height: 2em;
     /* Copy to other locations */
 }
-
 </style>

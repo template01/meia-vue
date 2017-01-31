@@ -1,11 +1,11 @@
 <template>
+<!-- <div v-bind:style="{'max-height':listHeight+'px'}" class="slideIn listSingle"> -->
 <div class="slideIn listSingle">
-  <ListpostsImages v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHideSinglePosts="toggleHideSinglePosts"></ListpostsImages>
-  <!-- <transition name="slide-fade"> -->
-  <div v-show="this.hideSinglePosts">
-    <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
+  <ListpostsImages v-on:emitSetImageHeight="function(input){setListHeight('image',input)}" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHideSinglePosts="toggleHideSinglePosts()"></ListpostsImages>
+  <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
+  <div v-bind:class="{ overflowHidden: !hideSinglePosts }">
+    <singlepostindex v-on:emitSetListHeight="setListHeight()" v-for="(project, index) in projects" v-bind:index="index" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
   </div>
-<!-- </transition> -->
 </div>
 </template>
 
@@ -16,7 +16,7 @@ import ListpostsImages from './ListpostsImages'
 import fitText from '../assets/fittext'
 
 export default {
-  props: ['categoryyear', 'categorylink'],
+  props: ['categoryyear', 'categorylink', 'index'],
   components: {
     Listposts,
     Singlepostindex,
@@ -25,8 +25,10 @@ export default {
   data() {
     return {
       hideSinglePosts: true,
+      // listHeight: 0,
+      // postsListHeight:0,
       projects: [],
-      featuredimages:[]
+      featuredimages: []
     }
   },
   created: function() {
@@ -34,61 +36,69 @@ export default {
       this.$http.get(this.categorylink).then(function(response) {
         // console.log(response)
         this.projects = response.body
-        var savedThis = this
 
         for (var i = 0; i < this.projects.length; i++) {
-          if(this.projects[i].acf){
-            // console.log(this.projects[i].acf.featuredimage.sizes.large);
-            // this.featuredimages.push({large:this.projects[i].acf.featuredimage.sizes.large})
-            console.log(i)
-            console.log(this.projects[i].acf)
-            this.featuredimages.push({large:this.projects[i].acf.featuredimage.sizes.large})
-            // this.$set(this.featuredimages)
-            // this.featuredimages = Object.assign({}, this.featuredimages, {type:"xxxxxxxxxxxxx", model:"50dasdddddddddddddddddddddddd0", color:"white"})
-            // this.featuredimages.$set( {type:"ass", model:"500", color:"white"});
-          }else{
-            // this.featuredimages.push({large:''})
+          if (this.projects[i].acf) {
 
+
+            this.featuredimages.push({
+              large: this.projects[i].acf.featuredimage.sizes.large
+            })
           }
-          // console.log(savedThis.featuredimages[1])
-            //Do something
         }
 
-        // this.featuredimages = Object.assign({}, this.featuredimages, {type:"asasdsds", model:"500", color:"white"})
+        // this.setListHeight()
 
-
-        // console.log(this.featuredimages[0].large)
-// log( response.body )
-        //
-        // for (i < this.projects.length) {
-        //   console.log('maan')
-        // }
       })
     }
 
   },
+
   methods: {
     toggleHideSinglePosts: function() {
       this.hideSinglePosts = !this.hideSinglePosts
-    }
+      if (this.hideSinglePosts) {
 
-    // toggleCheckParent: function(index) {
-    //   // console.log('check parent' + index)
-    //   this.$set(this.projectsChecked, index, this.toggleChecked(index))
-    // },
-    // toggleChecked: function(index) {
-    //   return this.projectsChecked[index] = !this.projectsChecked[index]
-    // }
-  }
+          this.setListHeight()
+
+      } else {
+        this.setListHeight('image')
+      }
+    },
+    setListHeight: function(input, height) {
+
+      if (input === 'image') {
+        this.$emit('emitSetListHeight', height)
+      } else {
+        // setTimeout(function() {
+        var vm = this
+        setTimeout(function() {
+          var listHeight = vm.$el.offsetHeight
+          vm.$emit('emitSetListHeight', listHeight)
+        }, 1)
+      }
+    }
+  },
+  // mounted: function() {
+  // }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 .listSingle {
-  position: relative;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: max-height 0.8s;
+    -moz-transition: max-height 0.8s;
+    transition: max-height 0.8s;
 }
-
+//
+.overflowHidden {
+    background: red;
+    overflow: hidden;
+    height: 0;
+}
 
 /*
   .listSingle{

@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'id'],
+  props: ['title', 'index','projectslength', 'id'],
   data() {
     return {
       showSingle: false,
@@ -33,11 +33,15 @@ export default {
           this.postJsonContent = response.body.content.rendered
 
         }
+        this.$emit('emitSetListHeight')
+
       })
     },
 
     collapseSingle: function() {
       this.showSingle = !this.showSingle
+      this.$emit('emitSetListHeight')
+      
       // this.postJsonContent = ''
     }
 
@@ -63,20 +67,25 @@ export default {
       }
     }
   },
-  // mounted: function() {
-  //    window.fitText( document.getElementById(this.id),2 );
-  //   // console.log('ready')
-  //
-  // }
+  mounted: function() {
+    // var listHeight = this.$el.offsetHeight
+    // this.$emit('emitSetListHeight')
+
+    //  window.fitText( document.getElementById(this.id),2 );
+    // console.log(this.projectslength)
+    // alert('end')
+    // if(this.projectslength-1==this.index){
+    //   // this.$emit('emitSetListHeight')
+    //   this.$emit('emitSetListHeight',[3, 100])
+    //
+    // }
+  }
 
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.active {
-    background: red;
-}
 
 .single {
     width: calc(100% - 40px);
