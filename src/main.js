@@ -5,10 +5,10 @@ import App from './App'
 
 import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
 // import swiper from '../node_modules/swiper/dist/css/swiper.min.css'
-import Hello from './components/Hello'
+import singlePost from './components/singlePost'
 import Indexpage from './components/Indexpage'
 import Headermenu from './components/Headermenu'
-
+import Getgradyears from './components/Getgradyears'
 
 
 
@@ -17,30 +17,40 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: __dirname,
+  // base: __dirname,
   routes: [
-    {path:'/', component: Indexpage},
-    {path:'/hello', component: Hello},
-    // {path: '/test', component: Test}
-  ],
-});
-
-/* eslint-disable no-new */
-//
-// var vm = new Vue({
-//     methods: {
-//         foo: function() {
-//             console.log('bar');
-//         }
-//     }
-// });
-//
-// vm.foo(); // prints 'bar'
+    {
+      path: '/',
+      name: 'home',
+      component: Indexpage,
+    //   beforeEnter: (to, from, next) => {
+    //    alert('next')
+    // },
+    children: [
+      {
+        // UserProfile will be rendered inside User's <router-view>
+        // when /user/:id/profile is matched
+        path: 'work/:id',
+        component: singlePost,
 
 
+      },
+      // {
+      //   // UserPosts will be rendered inside User's <router-view>
+      //   // when /user/:id/posts is matched
+      //   path: 'profile',
+      //   component: singlePost
+      // }
+    ]
+  }
+  ]
+})
 
+// router.beforeEach((to, from, next) => {
 
-var ass = new Vue({
+  // console.log('next')// ...
+// })
+new Vue({
   router,
   components: {
     Headermenu

@@ -4,8 +4,10 @@
     <h1 v-bind:id="id"><span>{{ pickRandomName }}</span><span v-bind:class="addTitleLengthClass">{{title}}</span></h1>
   </div>
 
-  <div v-show="showSingle" class="singleContent">
+  <div v-bind:class="{ expanded: showSingle }" class="singleContent">
     <!-- </div> -->
+    <router-link v-bind:to="'work/'+id">link</router-link>
+
     <button v-on:click="collapseSingle">-</button>
     <div class="singleContentInner" v-html="postJsonContent"></div>
   </div>
@@ -28,20 +30,15 @@ export default {
       // alert('expaaand')
       this.showSingle = !this.showSingle
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts/' + id).then(function(response) {
-        // console.log(this.postJsonContent.length)
+
         if(this.postJsonContent.length === 0){
-          this.postJsonContent = response.body.content.rendered
-
+          this.postJsonContent = response.body.excerpt.rendered
         }
-        this.$emit('emitSetListHeight')
-
       })
     },
 
     collapseSingle: function() {
       this.showSingle = !this.showSingle
-      this.$emit('emitSetListHeight')
-      
       // this.postJsonContent = ''
     }
 
@@ -126,7 +123,19 @@ export default {
 }
 
 .singleContent {
-    border-top: 1px solid black;
+    max-height: 0px;
+    overflow: hidden;
+    border-top: 0px solid black;
+    -webkit-transition: max-height 0.8s;
+    -moz-transition: max-height 0.8s;
+    transition: max-height 0.8s;
+
+    &.expanded{
+      max-height: 3000px;
+      border-top: 1px solid black;
+
+      // overflow-y:auto;
+    }
     &:empty {
         display: none;
     }

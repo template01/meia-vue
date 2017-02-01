@@ -1,7 +1,7 @@
 <template>
 <div>
-  <div v-show="showImages" class="listpostsImages">
-    <div class="listpostsImagesInner">
+  <div class="listpostsImages">
+    <div v-bind:class="{ expanded: showImages }" class="listpostsImagesInner">
       <!-- {{this.featuredimages[0]}} -->
       <div v-bind:class="'swiper-container'+this.categoryyear" class="swiper-container">
         <div class="swiper-wrapper">
@@ -39,17 +39,10 @@ export default {
   methods: {
     expandImages: function(id) {
       // alert('expaaand')
-      this.$emit('emittoggleHideSinglePosts')
+      this.$emit('emittoggleHidePostList')
       this.showImages = !this.showImages
       if (this.showImages) {
-        console.log('gio')
-        var savedThis = this
-
-        // savedThis.runSlider()
-        setTimeout(function() {
-          savedThis.runSlider()
-        }, 1);
-
+          this.runSlider()
       }
 
     },
@@ -67,44 +60,11 @@ export default {
           pagination: '.swiper-pagination' + this.categoryyear,
           paginationClickable: true,
           autoHeight: true,
-          onInit: function(swiper) {
-            var containerHeight = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
-            vm.$emit('emitSetImageHeight', containerHeight)
-          },
-          onTransitionEnd: function(swiper) {
-            var containerHeight = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
-            vm.$emit('emitSetImageHeight', containerHeight)
-          }
         });
-      } else {
-        var containerHeightInit = vm.$el.getElementsByClassName("swiper-wrapper")[0].offsetHeight
-        vm.$emit('emitSetImageHeight', containerHeightInit)
-
       }
     }
 
   },
-
-
-  //   watch: {
-  //   sliderHeight: function (sliderHeight) {
-  //     console.log(sliderHeight)
-  //     this.$emit('emitSetListHeight')
-  //     // this.$emit('emitSetListHeight',[1, 100])
-  //     // this.$emit('emitSetListHeight',[2, 100])
-  //     // this.$emit('emitSetListHeight',[3, 100])
-  //
-  //   },
-  //   setheight: function (setheight) {
-  //     console.log('change')
-  //
-  //   }
-  //
-  // },
-
-  // mounted: function() {
-  // this.runSlider()
-  // }
 
 
 }
@@ -114,9 +74,22 @@ export default {
 <style lang="scss" scoped>
 .listpostsImages {
     width: calc(100% - 40px);
+    border-top: 1px solid black;
+
     .listpostsImagesInner {
         // background: red;
+        max-height: 0px;
+        overflow: hidden;
+        -webkit-transition: max-height 0.8s;
+        -moz-transition: max-height 0.8s;
+        transition: max-height 0.8s;
         border-bottom: 1px solid black;
+
+
+        &.expanded{
+          max-height: 3000px;
+          // overflow-y:auto;
+        }
 
         img {
             margin: 0 auto;
@@ -140,6 +113,7 @@ export default {
     //  background: red
     border-left: 1px solid black;
     border-bottom: 1px solid black;
+    border-top: 1px solid black;
     border-right: 1px solid black;
 }
 .listpostsImagesEvent h1 {
