@@ -7,7 +7,9 @@
         <div class="swiper-wrapper">
 
           <div v-bind:class="'swiper-slide'+categoryyear" class="swiper-slide" v-for="(featuredimage, index) in featuredimages">
-            <img v-bind:src="featuredimage.large" />
+            <img class="swiper-lazy" v-bind:data-src="featuredimage.large" />
+            <!-- <img data-src="http://lorempixel.com/1600/1200/nature/1" class="swiper-lazy"> -->
+            <!-- <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div> -->
           </div>
 
         </div>
@@ -60,6 +62,14 @@ export default {
           pagination: '.swiper-pagination' + this.categoryyear,
           paginationClickable: true,
           autoHeight: true,
+          lazyLoading: true,
+          preloadImages: false,
+          lazyLoadingInPrevNext: true,
+          // lazyLoadingOnTransitionStart: true,
+          lazyLoadingClass: 'swiper-lazy',
+          onLazyImageReady: function(swiper){
+            swiper.updateAutoHeight()
+          }
         });
       }
     }
@@ -72,23 +82,31 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import "../scss/globalVars.scss";
+
 .listpostsImages {
-    width: calc(100% - 40px);
-    border-top: 1px solid black;
+
+    width: calc(100% - #{$mainHeaderHeight});
+    border-top: $mainBorderStyle;
 
     .listpostsImagesInner {
         // background: red;
         max-height: 0px;
         overflow: hidden;
-        -webkit-transition: max-height 0.8s;
-        -moz-transition: max-height 0.8s;
-        transition: max-height 0.8s;
-        border-bottom: 1px solid black;
+        border-bottom: 0px solid black;
+
+        -webkit-transition: max-height 0.5s, border 0.5s;
+        -moz-transition: max-height 0.5s, border 0.5s;
+        transition: max-height 0.5s, border 0.5s;
 
 
         &.expanded{
           max-height: 3000px;
+          border-bottom: $mainBorderStyle;
           // overflow-y:auto;
+          -webkit-transition: max-height 0.5s, border 0.5s;
+          -moz-transition: max-height 0.5s, border 0.5s;
+          transition: max-height 0.5s, border 0.5s;
         }
 
         img {
@@ -106,15 +124,15 @@ export default {
     top: 0;
     right: 0;
     bottom: 0;
-    width: 40px;
+    width: $mainHeaderHeight;
     /* line-height of .wrapper div:first-child span */
     overflow: hidden;
     white-space: nowrap;
     //  background: red
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    border-right: 1px solid black;
+    border-left: $mainBorderStyle;
+    border-bottom: $mainBorderStyle;
+    border-top: $mainBorderStyle;
+    border-right: $mainBorderStyle;
 }
 .listpostsImagesEvent h1 {
     -moz-transform-origin: 0 50%;
@@ -133,9 +151,11 @@ export default {
     height: 2em;
     /* line-height of .wrapper div:first-child span */
     margin: auto;
-    font-weight: bold;
-    font-size: 1em;
-    line-height: 2em;
+    text-transform:uppercase;
+    font-weight: normal;
+    font-size: $secFontSize;
+    word-spacing: $mainPadding;
+    line-height: ($secFontSize*2)+($secFontBaseLineShift*3);
     /* Copy to other locations */
 }
 </style>

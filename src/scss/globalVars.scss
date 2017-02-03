@@ -1,0 +1,27 @@
+$mainFont: arial;
+
+$mainFontSize: 30px;
+$secFontSize: 16px;
+
+// requires position relative
+$secFontBaseLineShift: $secFontSize/8;
+
+$mainBackground: ghostwhite;
+
+$mainBackgroundGrey: darkgrey;
+
+$mainHeaderHeight: 40px;
+
+$mainPadding: 20px;
+
+$mainBorderStyle: 1px solid black;
+
+
+*{
+  font-family: $mainFont;
+  box-sizing: border-box;
+}
+
+body,html{
+  background: $mainBackground;
+}

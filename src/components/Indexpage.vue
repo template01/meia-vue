@@ -7,10 +7,11 @@
 
     <h1>PRETTY HEADER!</h1>
   </div> -->
-  <meiaHeader></meiaHeader>
+  <meiaHeader v-on:emitToggleNews="toggleNews()"></meiaHeader>
 
   <router-view></router-view>
   <div v-show="showIndex">
+    <meiaNews v-bind:expandedActive="showNews"></meiaNews>
     <Getgradyears></Getgradyears>
   </div>
 
@@ -27,6 +28,7 @@
 import Getgradyears from './Getgradyears'
 import meiaFooter from './meiaFooter'
 import meiaHeader from './meiaHeader'
+import meiaNews from './meiaNews'
 
 
 export default {
@@ -34,21 +36,23 @@ export default {
     Getgradyears,
     meiaFooter,
     meiaHeader,
+    meiaNews
   },
 
-  data:function(){
-    return{
-      showIndex:true
+  data: function() {
+    return {
+      showIndex: true,
+      showNews: false
     }
   },
 
   watch: {
 
     '$route': function(newRoute, oldRoute) {
-      if( this.$route.path.toString() === "/"){
-        this.showIndex=true
-      }else{
-        this.showIndex=false
+      if (this.$route.path.toString() === "/") {
+        this.showIndex = true
+      } else {
+        this.showIndex = false
       }
 
     },
@@ -57,8 +61,8 @@ export default {
   name: 'indexpage',
 
   beforeMount: function() {
-    if( this.$route.path.toString() != "/"){
-      this.showIndex=false
+    if (this.$route.path.toString() != "/") {
+      this.showIndex = false
     }
   },
 
@@ -66,7 +70,9 @@ export default {
     alertthis: function() {
       console.log('cereate')
     },
-
+    toggleNews: function(){
+      this.showNews = !this.showNews
+    }
   },
   created: function() {
     this.alertthis()
@@ -77,21 +83,9 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-  body,html{
-    background: ghostwhite;
-  }
-  #meiaAll{
-    background: ghostwhite;
-  }
+<style lang="scss">@import "../scss/globalVars.scss";
 
-  $fontsize: 30px;
-
-  *{
-
-    font-family: arial
-    ;
-  }
-
-
+#meiaAll {
+    background: $mainBackground;
+}
 </style>

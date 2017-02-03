@@ -4,13 +4,19 @@ import vueResource from 'vue-resource'
 import App from './App'
 
 import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
+// import SmoothScroll from '../node_modules/vue-smoothscroll/dist/vue-smoothscroll.js'
+// import smoothscroll from '../node_modules/smoothscroll-polyfill/dist/smoothscroll.js'
+// import scroll from '../yo.js'
+// import fittext from '../fittext.js'
 // import swiper from '../node_modules/swiper/dist/css/swiper.min.css'
 import singlePost from './components/singlePost'
 import Indexpage from './components/Indexpage'
-import Headermenu from './components/Headermenu'
+// import Headermenu from './components/Headermenu'
 import Getgradyears from './components/Getgradyears'
 
 
+var vueSmoothScroll = require('vue-smoothscroll');
+Vue.use(vueSmoothScroll);
 
 Vue.use(vueResource)
 Vue.use(VueRouter)
@@ -53,7 +59,7 @@ const router = new VueRouter({
 new Vue({
   router,
   components: {
-    Headermenu
+    // Headermenu
   },
   template: `
     <div id="app">

@@ -79,6 +79,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import "../scss/globalVars.scss";
+
 .slideOut {
     height: 0 !important;
     overflow: hidden !important;
@@ -103,13 +105,20 @@ export default {
     /* ease (default) */
     .yearNavigation {
         background: pink;
-        height: 40px;
+        height: $mainHeaderHeight;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         // cursor: pointer;
-
+        .left{
+          text-align: left;
+          padding: $mainPadding;
+        }
+        .right{
+          text-align: right;
+          padding: $mainPadding;
+        }
     }
     &:not(first-of-type) {
         .yearNavigation {
@@ -155,6 +164,9 @@ export default {
 span {
     width: 33.33333%;
     text-align: center;
+    font-size: $secFontSize;
+    top:$secFontBaseLineShift;
+    position: relative;
 }
 
 .left {

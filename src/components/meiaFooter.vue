@@ -18,12 +18,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../scss/globalVars.scss";
+
 #footer {
-    background: ghostwhite;
-    padding: 20px;
+    background:$mainBackground;
+    padding: $mainPadding;
     h1 {
         margin: 0;
-        font-size: 16px
+        font-size: $secFontSize
     }
 }
 </style>

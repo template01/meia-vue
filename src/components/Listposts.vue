@@ -39,11 +39,13 @@ export default {
 
         for (var i = 0; i < this.projects.length; i++) {
           if (this.projects[i].acf) {
+            // console.log(this.projects[i].acf.featuredimage)
+            if(this.projects[i].acf.featuredimage){
+              this.featuredimages.push({
+                large: this.projects[i].acf.featuredimage.sizes.large
+              })
+            }
 
-
-            this.featuredimages.push({
-              large: this.projects[i].acf.featuredimage.sizes.large
-            })
           }
         }
 
@@ -74,9 +76,9 @@ export default {
 .listPostsWrapper{
   max-height: 3000px;
   overflow: hidden;
-  -webkit-transition: max-height 0.8s;
-  -moz-transition: max-height 0.8s;
-  transition: max-height 0.8s;
+  -webkit-transition: max-height 0.5s;
+  -moz-transition: max-height 0.5s;
+  transition: max-height 0.5s;
   &.collapsed{
     max-height: 0px;
 
