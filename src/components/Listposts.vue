@@ -1,10 +1,10 @@
 <template>
 <!-- <div v-bind:style="{'max-height':listHeight+'px'}" class="slideIn listSingle"> -->
 <div class="slideIn listSingle">
-  <ListpostsImages v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages>
+  <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages>
   <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
   <div class="listPostsWrapper" v-bind:class="{ collapsed: hidePostList }">
-    <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
+    <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
   </div>
 </div>
 </template>
@@ -13,7 +13,6 @@
 import Listposts from './Listposts'
 import Singlepostindex from './Singlepostindex'
 import ListpostsImages from './ListpostsImages'
-import fitText from '../assets/fittext'
 
 export default {
   props: ['categoryyear', 'categorylink', 'index'],
@@ -28,7 +27,10 @@ export default {
       // listHeight: 0,
       // postsListHeight:0,
       projects: [],
-      featuredimages: []
+      featuredimages: [],
+      worktitles: [],
+      workids: [],
+      workstudents: []
     }
   },
   created: function() {
@@ -38,9 +40,18 @@ export default {
         this.projects = response.body
 
         for (var i = 0; i < this.projects.length; i++) {
+
+          this.workids.push(this.projects[i].id)
+
+
           if (this.projects[i].acf) {
-            // console.log(this.projects[i].acf.featuredimage)
-            if(this.projects[i].acf.featuredimage){
+
+
+            this.worktitles.push(this.projects[i].title.rendered)
+            this.workstudents.push(this.projects[i].acf.student_name)
+              // console.log(this.projects[i].acf.featuredimage)
+            if (this.projects[i].acf.featuredimage) {
+
               this.featuredimages.push({
                 large: this.projects[i].acf.featuredimage.sizes.large
               })
@@ -73,16 +84,15 @@ export default {
     transition: max-height 0.8s;
 }
 //
-.listPostsWrapper{
-  max-height: 3000px;
-  overflow: hidden;
-  -webkit-transition: max-height 0.5s;
-  -moz-transition: max-height 0.5s;
-  transition: max-height 0.5s;
-  &.collapsed{
-    max-height: 0px;
+.listPostsWrapper {
+    max-height: 3000px;
+    overflow: hidden;
+    -webkit-transition: max-height 0.5s;
+    -moz-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+    &.collapsed {
+        max-height: 0;
 
-  }
+    }
 }
-
 </style>

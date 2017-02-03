@@ -7,14 +7,30 @@
         <div class="swiper-wrapper">
 
           <div v-bind:class="'swiper-slide'+categoryyear" class="swiper-slide" v-for="(featuredimage, index) in featuredimages">
+            <router-link v-bind:to="'work/'+workids[index]">
+
             <img class="swiper-lazy" v-bind:data-src="featuredimage.large" />
+          </router-link>
+
             <!-- <img data-src="http://lorempixel.com/1600/1200/nature/1" class="swiper-lazy"> -->
             <!-- <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div> -->
+            <div class="swiper-title">
+              <div class="swiper-titleInner">
+                <router-link v-bind:to="'work/'+workids[index]">
+                  <div class="swiper-titleText">
+                    <p><span v-html="workstudents[index]"></span><br>&mdash;<br><span v-html="worktitles[index]"></span></p>
+                  </div>
+                </router-link>
+              </div>
+            </div>
+
           </div>
 
         </div>
         <!-- Add Pagination -->
-        <div v-bind:class="'swiper-pagination'+this.categoryyear" class="swiper-pagination"></div>
+        <div class="swiper-pagination-wrapper">
+          <div v-bind:class="'swiper-pagination'+this.categoryyear" class="swiper-pagination"></div>
+        </div>
       </div>
 
     </div>
@@ -30,7 +46,7 @@
 <script>
 export default {
   name: 'listpostsImages',
-  props: ['categoryyear', 'featuredimages'],
+  props: ['categoryyear', 'featuredimages', 'worktitles', 'workstudents', 'workids'],
   data() {
     return {
       showImages: false,
@@ -44,7 +60,7 @@ export default {
       this.$emit('emittoggleHidePostList')
       this.showImages = !this.showImages
       if (this.showImages) {
-          this.runSlider()
+        this.runSlider()
       }
 
     },
@@ -67,7 +83,7 @@ export default {
           lazyLoadingInPrevNext: true,
           // lazyLoadingOnTransitionStart: true,
           lazyLoadingClass: 'swiper-lazy',
-          onLazyImageReady: function(swiper){
+          onLazyImageReady: function(swiper) {
             swiper.updateAutoHeight()
           }
         });
@@ -81,32 +97,66 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-@import "../scss/globalVars.scss";
+<style lang="scss" scoped>@import "../scss/globalVars.scss";
 
 .listpostsImages {
 
-    width: calc(100% - #{$mainHeaderHeight});
+    width: 100%;
+    // width: calc(100% - #{$mainHeaderHeight});
     border-top: $mainBorderStyle;
 
     .listpostsImagesInner {
+
         // background: red;
-        max-height: 0px;
+        max-height: 0;
         overflow: hidden;
-        border-bottom: 0px solid black;
+        border-bottom: 0 solid black;
 
         -webkit-transition: max-height 0.5s, border 0.5s;
         -moz-transition: max-height 0.5s, border 0.5s;
         transition: max-height 0.5s, border 0.5s;
 
+        .swiper-container {
+            .swiper-title {
+                pointer-events: none;
+                position: absolute;
+                height: 100%;
+                width: 50%;
+                top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .swiper-titleInner {
+                    pointer-events: default;
+                    max-width: $mainHeaderHeight*6;
+                    border: $mainBorderStyle;
+                    p {
+                        margin: 0;
+                        text-align: center;
+                    }
 
-        &.expanded{
-          max-height: 3000px;
-          border-bottom: $mainBorderStyle;
-          // overflow-y:auto;
-          -webkit-transition: max-height 0.5s, border 0.5s;
-          -moz-transition: max-height 0.5s, border 0.5s;
-          transition: max-height 0.5s, border 0.5s;
+                    a{
+                      text-decoration: none;
+                    }
+                    .swiper-titleText {
+                        background: $mainBackground;
+                        padding: $mainPadding;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        &.expanded {
+            max-height: 3000px;
+            border-bottom: $mainBorderStyle;
+            // overflow-y:auto;
+            -webkit-transition: max-height 0.5s, border 0.5s;
+            -moz-transition: max-height 0.5s, border 0.5s;
+            transition: max-height 0.5s, border 0.5s;
         }
 
         img {
@@ -124,7 +174,9 @@ export default {
     top: 0;
     right: 0;
     bottom: 0;
-    width: $mainHeaderHeight;
+    z-index: 1;
+    background: $mainBackgroundPink;
+    width: $mainHeaderHeight+1;
     /* line-height of .wrapper div:first-child span */
     overflow: hidden;
     white-space: nowrap;
@@ -132,7 +184,7 @@ export default {
     border-left: $mainBorderStyle;
     border-bottom: $mainBorderStyle;
     border-top: $mainBorderStyle;
-    border-right: $mainBorderStyle;
+    // border-right: $mainBorderStyle;
 }
 .listpostsImagesEvent h1 {
     -moz-transform-origin: 0 50%;
@@ -151,11 +203,45 @@ export default {
     height: 2em;
     /* line-height of .wrapper div:first-child span */
     margin: auto;
-    text-transform:uppercase;
+    text-transform: uppercase;
     font-weight: normal;
     font-size: $secFontSize;
     word-spacing: $mainPadding;
     line-height: ($secFontSize*2)+($secFontBaseLineShift*3);
     /* Copy to other locations */
+}
+</style>
+
+<style lang="scss">@import "../scss/globalVars.scss";
+
+.swiper-pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // width: 40px;
+    width: $mainHeaderHeight*2;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: $mainHeaderHeight;
+}
+
+.swiper-pagination-bullet {
+    clear: both;
+    display: block;
+    margin: 4px !important;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: $mainBorderStyle;
+    opacity: 1;
+    &.swiper-pagination-bullet-active {
+        background: $mainBackgroundBlack;
+
+    }
+}
+
+.swiper-lazy-loaded{
+
 }
 </style>

@@ -20,8 +20,6 @@
 
 <script>
 import Listposts from './Listposts'
-// import Singlepostindex from './Singlepostindex'
-// import fitText from '../assets/fittext'
 
 export default {
   components: {

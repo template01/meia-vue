@@ -9,6 +9,7 @@ export default {
 
 
 <style src="../node_modules/swiper/dist/css/swiper.min.css"/>
+<style src="../src/fonts/arial.css"/>
 
 
 <style>

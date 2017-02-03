@@ -1,7 +1,13 @@
-$mainFont: arial;
+@import "../fonts/arial.css";
+
+$mainFont: Arial;
+
+$mainFontHeavy:900;
 
 $mainFontSize: 30px;
 $secFontSize: 16px;
+$thirdFontSize: 20px;
+
 
 // requires position relative
 $secFontBaseLineShift: $secFontSize/8;
@@ -10,16 +16,22 @@ $mainBackground: ghostwhite;
 
 $mainBackgroundGrey: darkgrey;
 
+$mainBackgroundPink: pink;
+
+$mainBackgroundBlack: #424242;
+
+
 $mainHeaderHeight: 40px;
 
 $mainPadding: 20px;
 
-$mainBorderStyle: 1px solid black;
+$mainBorderStyle: 1px solid $mainBackgroundBlack;
 
 
 *{
   font-family: $mainFont;
   box-sizing: border-box;
+  color: $mainBackgroundBlack;
 }
 
 body,html{

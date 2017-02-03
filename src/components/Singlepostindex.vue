@@ -1,8 +1,8 @@
 <template>
 <div class="single">
   <div class="singleTitle" v-on:click="expandSingle(id)">
-    <h1 class="singleRealName">{{ pickRandomName }}</h1>
-    <h1 v-bind:id="id" class="singleRealTitle" v-bind:style="{ width: 'calc(100% - '+ nameWidth + 'px)' }" v-bind:class="addTitleLengthClass">{{title}}</h1>
+    <h1 class="singleRealName" v-html="workstudent"></h1>
+    <h1 v-bind:id="id" class="singleRealTitle" v-bind:style="{ width: 'calc(100% - '+ nameWidth + 'px)' }" v-html="title" v-bind:class="addTitleLengthClass"></h1>
     <!-- <h1><span>{{ pickRandomName }}</span><span v-bind:id="id" v-bind:class="addTitleLengthClass">{{title}}</span></h1> -->
     <!-- <h1 v-bind:id="id"><span>{{title}}</h1> -->
   </div>
@@ -11,22 +11,22 @@
     <!-- </div> -->
 
     <div class="singleContentInner">
-      <div class="singleContentInnerLink">
-        <router-link v-bind:to="'work/'+id">link</router-link>
+      <router-link class="singleContentInnerLink" v-bind:to="'work/'+id"><span>🠢</span></router-link>
+      <div class="singleContentInnerRenderedWrapper">
+        <div class="singleContentInnerRendered" v-html="postJsonContent">
+        </div>
       </div>
-      <!-- <button v-on:click="collapseSingle">-</button> -->
-      <div class="singleContentInnerRendered" v-html="postJsonContent">
-      </div>
-
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import fitText from '../assets/fittext'
+
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'projectslength', 'id'],
+  props: ['title', 'index', 'projectslength', 'id', 'workstudent'],
   data() {
     return {
       showSingle: false,
@@ -42,6 +42,7 @@ export default {
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts/' + id).then(function(response) {
 
         if (this.postJsonContent.length === 0) {
+
           this.postJsonContent = response.body.excerpt.rendered
         }
       })
@@ -50,6 +51,38 @@ export default {
     collapseSingle: function() {
       this.showSingle = !this.showSingle
         // this.postJsonContent = ''
+    },
+
+    fitTitles: function() {
+      // console.log(this.$el.getElementsByClassName('singleRealName')[0].clientWidth)
+      // console.log(this.$el.getElementsByClassName('singleRealName')[0].offsetWidth)
+      this.nameWidth = this.$el.getElementsByClassName('singleRealName')[0].clientWidth + 1
+      var vm = this
+      setTimeout(function() {
+        if (vm.title.length <= 14) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 16);
+
+        }
+
+        if (vm.title.length > 14 && vm.title.length <= 24) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 14);
+
+        }
+        if (vm.title.length > 24 && vm.title.length <= 40) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 12);
+
+        }
+        if (vm.title.length > 40 && vm.title.length <= 60) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 10);
+
+        }
+
+        if (vm.title.length > 60) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 8);
+
+        }
+
+      }, 1)
     }
 
   },
@@ -75,32 +108,29 @@ export default {
     }
   },
   mounted: function() {
-    // var listHeight = this.$el.offsetHeight
-    // this.$emit('emitSetListHeight')
-    console.log(this.$el.getElementsByClassName('singleRealName')[0].clientWidth)
-    console.log(this.$el.getElementsByClassName('singleRealName')[0].offsetWidth)
-    this.nameWidth = this.$el.getElementsByClassName('singleRealName')[0].clientWidth + 1
+
+    this.fitTitles()
     var vm = this
-    setTimeout(function() {
-      if (vm.title.length <= 14) {
-        window.fitText(document.getElementById(vm.id), vm.title.length / 12);
+    window.addEventListener("load", function load(event) {
+      window.removeEventListener("load", load, false); //remove listener, no longer needed
+      vm.fitTitles()
+    }, false);
+    window.setTimeout(function() {
+      vm.fitTitles()
+      window.setTimeout(function() {
+        vm.fitTitles()
+        window.setTimeout(function() {
+          vm.fitTitles()
+        }, 500)
+      }, 500)
+    }, 500)
 
-      }
 
-      if (vm.title.length > 14 && vm.title.length <= 24) {
-        window.fitText(document.getElementById(vm.id), vm.title.length / 12);
 
-      }
-      if (vm.title.length > 24 && vm.title.length <= 50) {
-        window.fitText(document.getElementById(vm.id), vm.title.length / 16);
+  },
 
-      }
-      if (vm.title.length > 50) {
-        window.fitText(document.getElementById(vm.id), vm.title.length / 20);
+  created: function() {
 
-      }
-
-    }, 1)
 
   }
 
@@ -135,12 +165,14 @@ export default {
         margin: 0;
         border-top: $mainBorderStyle;
         // width: 100%;
+        font-family: $mainFont;
+        font-weight: $mainFontHeavy;
         float: left;
-        // white-space: nowrap;
-        // text-overflow: ellipsis;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         overflow: hidden;
-        height: 120px;
-        line-height: 120px;
+        height: 140px;
+        line-height: 140px;
 
         span {
             padding: 100px $mainPadding;
@@ -158,8 +190,18 @@ export default {
             }
         }
     }
-    &:last-child h1 {
-        border-bottom: $mainBorderStyle;
+    &:last-child {
+        h1 {
+            border-bottom: $mainBorderStyle;
+        }
+        .singleContent {
+            &.expanded {
+                border-bottom: $mainBorderStyle;
+                border-top: 0;
+                // background: blue;
+
+            }
+        }
     }
     &:first-child h1 {
         border-top: 0;
@@ -175,33 +217,62 @@ export default {
     -webkit-transition: max-height 0.5s, border 0.5s;
     -moz-transition: max-height 0.5s, border 0.5s;
     transition: max-height 0.5s, border 0.5s;
-
-    // padding-left: $mainPadding;
-    // padding-right: $mainPadding;
-
     &.expanded {
         max-height: 3000px;
         border-top: $mainBorderStyle;
-        // padding-top: $mainPadding;
-        // padding-bottom: $mainPadding;
-
         -webkit-transition: max-height 0.5s, border 0.5s;
         -moz-transition: max-height 0.5s, border 0.5s;
         transition: max-height 0.5s, border 0.5s;
-        // -webkit-transition: padding 0.0ss;
-        // -moz-transition: padding 0.0ss;
-        // transition: padding 0.0ss;
-        // overflow-y:auto;
     }
 
     .singleContentInner {
-        padding: $mainPadding;
-        .singleContentInnerLink{
-          background: $mainBackgroundGrey;
+        // padding: $mainPadding;
+        position: relative;
+        .singleContentInnerRenderedWrapper {
+            padding: $mainPadding;
+            width: calc(50% + #{$mainHeaderHeight/2});
+            // width: 50%;
+            // float: left;
+            // display: inline-block;
+            p {
+                font-size: 30px;
+            }
+        }
+        .singleContentInnerLink {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            // background: $mainBackgroundGrey;
+            width: calc(50% - #{$mainHeaderHeight/2});
+
+            position: absolute;
+            height: 100%;
+            right: 0;
+            border-left: $mainBorderStyle;
+            border-right: $mainBorderStyle;
+            text-decoration: none;
+            color: $mainBackgroundBlack;
+            font-size: $mainFontSize;
+            a {
+                }
+
         }
     }
     &:empty {
         display: none;
     }
+}
+</style>
+
+<style lang="scss">@import "../scss/globalVars.scss";
+
+.singleContentInnerRendered {
+    p {
+        margin: 0;
+        font-size: $thirdFontSize;
+    }
+    // padding-left: $mainHeaderHeight*4;
+    // padding-right: $mainHeaderHeight*4;
 }
 </style>
