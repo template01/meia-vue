@@ -11,7 +11,7 @@
     <!-- </div> -->
 
     <div class="singleContentInner">
-      <router-link class="singleContentInnerLink" v-bind:to="'work/'+id"><span>🠢</span></router-link>
+      <router-link class="singleContentInnerLink" v-bind:to="'work/'+id"><span>→</span></router-link>
       <div class="singleContentInnerRenderedWrapper">
         <div class="singleContentInnerRendered" v-html="postJsonContent">
         </div>

@@ -64,6 +64,9 @@ export default {
             outline: none;
         }
     }
+    a{
+    text-decoration:none;
+    }
     h1 {
         margin: 0;
 
