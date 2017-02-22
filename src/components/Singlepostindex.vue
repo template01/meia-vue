@@ -22,7 +22,10 @@
 </template>
 
 <script>
-import fitText from '../assets/fittext'
+import fitText from '../assets/fittext.js'
+
+import alertTest from '../assets/alert.js'
+
 
 export default {
   name: 'singlepostindex',

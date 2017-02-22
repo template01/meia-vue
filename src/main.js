@@ -3,6 +3,10 @@ import VueRouter from 'vue-router'
 import vueResource from 'vue-resource'
 import App from './App'
 
+
+
+
+
 import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
 import singlePost from './components/singlePost'
 import Indexpage from './components/Indexpage'
