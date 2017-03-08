@@ -34,8 +34,11 @@ export default {
     }
   },
   created: function() {
+    console.log(this.categorylink)
+    // EXCLUDE YEAR SPLASH (ID=13) TAGS!
+
     if (this.projects.length === 0) {
-      this.$http.get(this.categorylink).then(function(response) {
+      this.$http.get(this.categorylink+'&tags_exclude=13').then(function(response) {
         // console.log(response)
         this.projects = response.body
 

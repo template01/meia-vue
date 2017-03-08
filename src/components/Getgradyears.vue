@@ -7,11 +7,11 @@
 
       <div class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
-        <span v-on:click="clickPrev(index)" class="left">PREV</span>
+        <span v-on:click="clickPrev(index)" class="left">←</span>
         <span>{{year.name}}</span>
-        <span v-on:click="clickNext(index)" class="right">NEXT</span>
+        <span v-on:click="clickNext(index)" class="right">→</span>
       </div>
-
+      <Splashposts v-bind:categorylink="year._links['wp:post_type'][0].href"></Splashposts>
       <Listposts v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
     </div>
   </div>
@@ -20,10 +20,11 @@
 
 <script>
 import Listposts from './Listposts'
+import Splashposts from './Splashposts'
 
 export default {
   components: {
-    Listposts
+    Listposts,Splashposts
   },
   data() {
     return {
@@ -102,7 +103,14 @@ export default {
     transition-timing-function: cubic-bezier(0.250, 0.100, 0.250, 1.000);
     /* ease (default) */
     .yearNavigation {
-        background: pink;
+
+        background: $mainBackgroundBlack;
+        color: $mainBackground;
+        border-bottom: 1px solid $mainBackground;
+
+        // background: pink;
+        // color: $mainBackgroundBlack;
+
         height: $mainHeaderHeight;
         width: 100%;
         display: flex;
@@ -128,7 +136,7 @@ export default {
     &:first-of-type {
         .yearNavigation {
             .left {
-                // visibility: hidden;
+                visibility: hidden;
                 color: lightgrey;
                 pointer-events: none;
                 cursor: default;
@@ -147,7 +155,7 @@ export default {
     &:last-of-type {
         .yearNavigation {
             .right {
-                // visibility: hidden;
+                visibility: hidden;
                 color: darkgrey;
                 pointer-events: none;
                 cursor: default;

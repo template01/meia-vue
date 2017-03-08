@@ -38,12 +38,16 @@ export default {
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
 #meiaHeader {
+    color: $mainBackgroundBlack;
+
     background: $mainBackground;
     display: flex;
     align-items: center;
     justify-content: center;
     height: $mainHeaderHeight;
     .headerElement {
+      color: $mainBackgroundBlack;
+
         width: 33.33333%;
         font-size: $secFontSize;
         padding: $mainPadding;
@@ -57,6 +61,8 @@ export default {
         border: none;
         margin: 0;
         padding: 0;
+        color: $mainBackgroundBlack;
+        
         &:first-of-type {
             padding-right: $mainPadding;
         }
@@ -64,11 +70,14 @@ export default {
             outline: none;
         }
     }
-    a{
-    text-decoration:none;
+    a {
+        text-decoration: none;
+        color: $mainBackgroundBlack;
+
     }
     h1 {
         margin: 0;
+        color: $mainBackgroundBlack;
 
     }
     .alignCenter {

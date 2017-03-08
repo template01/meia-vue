@@ -1,0 +1,88 @@
+This site can’t be reached
+
+codeload.github.com’s server DNS address could not be found.
+Try:
+Checking the proxy, firewall, and DNS configuration
+DNS_PROBE_FINISHED_BAD_CONFIG
+
+
+
+localhost/:1 Uncaught (in promise) Responsebody: nulldata: (...)get data: get()set data: set(body)headers: Headersok: falsestatus: 0statusText: ""url: "http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts"__proto__: Object
+
+
+
+vue-resource.common.js?2f13:1071 GET http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8 net::ERR_NAME_RESOLUTION_FAILED
+(anonymous) @ vue-resource.common.js?2f13:1071
+PromiseObj @ vue-resource.common.js?2f13:198
+xhrClient @ vue-resource.common.js?2f13:1025
+sendRequest @ vue-resource.common.js?2f13:1140
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+before @ vue-resource.common.js?2f13:966
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+timeout @ vue-resource.common.js?2f13:1014
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+method @ vue-resource.common.js?2f13:980
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+body @ vue-resource.common.js?2f13:853
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+jsonp @ vue-resource.common.js?2f13:942
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+header @ vue-resource.common.js?2f13:997
+exec @ vue-resource.common.js?2f13:1097
+next @ vue-resource.common.js?2f13:1122
+cors @ vue-resource.common.js?2f13:824
+exec @ vue-resource.common.js?2f13:1097
+(anonymous) @ vue-resource.common.js?2f13:1125
+PromiseObj @ vue-resource.common.js?2f13:198
+Client @ vue-resource.common.js?2f13:1090
+Http @ vue-resource.common.js?2f13:1350
+Http.(anonymous function) @ vue-resource.common.js?2f13:1379
+created @ Getgradyears.vue?d277:40
+callHook @ vue.common.js?e881:2754
+Vue._init @ vue.common.js?e881:3379
+VueComponent @ vue.common.js?e881:3500
+createComponentInstanceForVnode @ vue.common.js?e881:1724
+init @ vue.common.js?e881:1734
+createComponent @ vue.common.js?e881:4174
+createElm @ vue.common.js?e881:4117
+createChildren @ vue.common.js?e881:4242
+createElm @ vue.common.js?e881:4150
+createChildren @ vue.common.js?e881:4242
+createElm @ vue.common.js?e881:4150
+patch @ vue.common.js?e881:4569
+Vue._update @ vue.common.js?e881:2635
+updateComponent @ vue.common.js?e881:2609
+get @ vue.common.js?e881:2934
+Watcher @ vue.common.js?e881:2926
+Vue._mount @ vue.common.js?e881:2608
+Vue$3.$mount @ vue.common.js?e881:6176
+Vue$3.$mount @ vue.common.js?e881:8547
+init @ vue.common.js?e881:1740
+(anonymous) @ vue.common.js?e881:1894
+createComponent @ vue.common.js?e881:4174
+createElm @ vue.common.js?e881:4117
+createChildren @ vue.common.js?e881:4242
+createElm @ vue.common.js?e881:4150
+patch @ vue.common.js?e881:4605
+Vue._update @ vue.common.js?e881:2635
+updateComponent @ vue.common.js?e881:2609
+get @ vue.common.js?e881:2934
+Watcher @ vue.common.js?e881:2926
+Vue._mount @ vue.common.js?e881:2608
+Vue$3.$mount @ vue.common.js?e881:6176
+Vue$3.$mount @ vue.common.js?e881:8547
+(anonymous) @ main.js?3479:67
+(anonymous) @ app.js:824
+__webpack_require__ @ app.js:556
+fn @ app.js:87
+(anonymous) @ app.js:587
+__webpack_require__ @ app.js:556
+(anonymous) @ app.js:579
+(anonymous) @ app.js:582
+localhost/:1 Uncaught (in promise) Response {url: "http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8", ok: false, status: 0, statusText: "", headers: Headers…}

@@ -144,11 +144,15 @@ export default {
 <style lang="scss" scoped>@import "../scss/globalVars.scss";
 
 .single {
+
+  color: $mainBackgroundBlack;
+
     width: calc(100% - #{$mainHeaderHeight});
 
     .singleTitle {
         width: 100%;
         clear: both;
+        cursor: pointer;
     }
     .singleRealTitle {
         width: 80%;

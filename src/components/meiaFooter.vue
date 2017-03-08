@@ -25,6 +25,8 @@ export default {
     padding: $mainPadding;
     h1 {
         margin: 0;
+        color: $mainBackgroundBlack;
+        
         font-size: $secFontSize
     }
 }
