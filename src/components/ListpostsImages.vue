@@ -9,8 +9,8 @@
           <div v-bind:class="'swiper-slide'+categoryyear" class="swiper-slide" v-for="(featuredimage, index) in featuredimages">
             <router-link v-bind:to="'work/'+workids[index]">
 
-            <img class="swiper-lazy" v-bind:data-src="featuredimage.large" />
-          </router-link>
+              <img class="swiper-lazy" v-bind:data-src="featuredimage.large" />
+            </router-link>
 
             <!-- <img data-src="http://lorempixel.com/1600/1200/nature/1" class="swiper-lazy"> -->
             <!-- <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div> -->
@@ -112,10 +112,9 @@ export default {
         overflow: hidden;
         border-bottom: 0 solid black;
 
-        -webkit-transition: max-height 0.5s, border 0.5s;
-        -moz-transition: max-height 0.5s, border 0.5s;
-        transition: max-height 0.5s, border 0.5s;
-
+        -webkit-transition: max-height 0.5s, border 0.5s, padding 0.2s;
+        -moz-transition: max-height 0.5s, border 0.5s, padding 0.2s;
+        transition: max-height 0.5s, border 0.5s, padding 0.2s;
         .swiper-container {
             .swiper-title {
                 pointer-events: none;
@@ -135,8 +134,8 @@ export default {
                         text-align: center;
                     }
 
-                    a{
-                      text-decoration: none;
+                    a {
+                        text-decoration: none;
                     }
                     .swiper-titleText {
                         background: $mainBackground;
@@ -151,12 +150,14 @@ export default {
         }
 
         &.expanded {
+            padding-top: $mainPadding;
+            padding-bottom: $mainPadding;
             max-height: 3000px;
             border-bottom: $mainBorderStyle;
             // overflow-y:auto;
-            -webkit-transition: max-height 0.5s, border 0.5s;
-            -moz-transition: max-height 0.5s, border 0.5s;
-            transition: max-height 0.5s, border 0.5s;
+            -webkit-transition: max-height 0.5s, border 0.5s, padding 0.5s;
+            -moz-transition: max-height 0.5s, border 0.5s, padding 0.5s;
+            transition: max-height 0.5s, border 0.5s, padding 0.5s;
         }
 
         img {
@@ -241,7 +242,6 @@ export default {
     }
 }
 
-.swiper-lazy-loaded{
-
-}
+.swiper-lazy-loaded {
+    }
 </style>

@@ -1,9 +1,17 @@
 <template>
-  <div id="footer">
-    <h1>PRETTY FOOTER Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nisi tellus, fermentum finibus lectus quis, interdum molestie leo. Morbi ultrices scelerisque lacus.</h1>
-    <h1>At Text we want to publish books that make a difference to people’s lives. We believe that reading should be a marvellous experience, that every book you read should somehow change your life if only by a fraction. We love the phrase ‘lost in a book’—that’s where we want our readers to be. You can’t get lost in a newspaper or a magazine or even a movie. But people get lost in books every day—on the tram, on the beach, in bed. Reading is what keeps the imagination supple and challenges preconceptions and prejudices. You read at your own speed, and the world you enter courtesy of the writer is yours and yours only, even if the person next to you on the bus is reading exactly the same book.</h1>
-  </div>
+<div id="footer">
+  <div class="footerContentWrapper">
+    <div class="left">
+      <p>ABOUT</p>
+      <p v-html="about"></p>
+    </div>
+    <div class="right">
+      <p>COLOPHON</p>
+      <p v-html="colophon"></p>
+    </div>
 
+</div>
+</div>
 </template>
 
 <script>
@@ -14,20 +22,68 @@ export default {
   //     default: 'Veeeue!'
   //   }
   // }
+  data() {
+    return {
+      about:'',
+      colophon:''
+    }
+  },
+
+  methods: {
+    getContent: function(yearCategory) {
+
+      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/pages').then(function(response) {
+        // this.postJsonTitle = response.body[0].title.rendered
+        this.about = response.body[0].acf.about
+        this.colophon = response.body[0].acf.colophon
+          // if(this.postJsonContent.length === 0){
+          // this.postJsonContent = response.body.content.rendered
+          // this.postJsonTitle = response.body.title.rendered
+
+        // }
+      })
+    }
+  },
+  created: function() {
+    this.getContent(this.$route.params.yearCategory)
+  },
+
 }
 </script>
 
-<style scoped lang="scss">
-@import "../scss/globalVars.scss";
+<style scoped lang="scss">@import "../scss/globalVars.scss";
 
 #footer {
-    background:$mainBackground;
-    padding: $mainPadding;
-    h1 {
+    background: $mainBackground;
+    // padding: $mainPadding;
+    p {
         margin: 0;
         color: $mainBackgroundBlack;
-        
-        font-size: $secFontSize
+        font-size: $secFontSize;
     }
+
+
+        .footerContentWrapper {
+
+            width: 100%;
+            clear: both;
+            display: inline-block;
+
+            .left {
+                width: 50%;
+                float: left;
+                padding: $mainPadding;
+                // padding-top: $mainPadding*2;
+                // border-right: $mainBorderStyle;
+            }
+            .right {
+              padding: $mainPadding;
+              // padding-top: $mainPadding*2;
+                width: 50%;
+                float: right;
+            }
+
+        }
+
 }
 </style>

@@ -11,7 +11,7 @@
 
   <router-view></router-view>
   <div v-show="showIndex">
-    <meiaNews v-bind:expandedActive="showNews"></meiaNews>
+    <!-- <meiaNews v-bind:expandedActive="showNews"></meiaNews> -->
     <Getgradyears></Getgradyears>
   </div>
 

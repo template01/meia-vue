@@ -1,6 +1,6 @@
 <template>
 <!-- <div v-bind:style="{'max-height':listHeight+'px'}" class="slideIn listSingle"> -->
-<div class="slideIn listSingle">
+<div id="listPostWrapper" class="slideIn listSingle">
   <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages>
   <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
   <div class="listPostsWrapper" v-bind:class="{ collapsed: hidePostList }">

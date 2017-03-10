@@ -1,24 +1,21 @@
 <template>
 <!-- <div v-bind:style="{'max-height':listHeight+'px'}" class="slideIn listSingle"> -->
-<div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }">
+<!-- <div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }"> -->
+<div class="splashPost" v-bind:class="{ expanded: showSplash }">
   <div class="titleWrap">
-    <p>Graduation</p>
     <h1>{{yearTitle}}</h1>
   </div>
   <div v-html="splashContent" class="blurbWrap">
   </div>
   <div class="navigationWrap">
-    <div>
-      <span>↓</span>
-      <span>Graduates</span>
-      <span>↓</span>
+    <div class="border-right" v-on:click="goToGraduates()">
+      <span>Graduates ↓</span>
     </div>
-    <div>
-      <!-- <span>→</span>
-      <span>Read More</span>
-      <span>→</span> -->
-      <span>Read More →</span>
-    </div>
+    <router-link class="singleContentInnerLink" v-bind:to="'year/'+'2014-2016'">
+      <div>
+        <span><span>Read More</span></span>
+      </div>
+    </router-link>
   </div>
 
 </div>
@@ -26,7 +23,7 @@
 
 <script>
 export default {
-  props: ['categorylink'],
+  props: ['categorylink', 'listpostId'],
   components: {
     // Listposts,
     // Splashposts
@@ -39,8 +36,6 @@ export default {
       yearTitle: '',
       splashContent: '',
       showSplash: true
-        // listHeight: 0,
-        // postsListHeight:0,
     }
   },
   created: function() {
@@ -49,9 +44,6 @@ export default {
     //
     this.$http.get(this.categorylink + '&tags=13').then(function(response) {
       if (response.body.length > 0) {
-        // console.log('go')
-        // console.log( response.body[0].id)
-        // this.yearSplash=response.body[0]
         this.yearTitle = response.body[0].title.rendered
         this.splashContent = response.body[0].content.rendered
 
@@ -64,21 +56,17 @@ export default {
 
   methods: {
     expandSplash: function(id) {
-      // alert('expaaand')
       this.showSplash = !this.showSplash
-        // this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts/' + id).then(function(response) {
-        //
-        //   if (this.postJsonContent.length === 0) {
-        //
-        //     this.postJsonContent = response.body.excerpt.rendered
-        //   }
-        // })
     },
 
     collapseSplash: function() {
       this.showSplash = !this.showSplash
         // this.postJsonContent = ''
     },
+    goToGraduates: function() {
+      this.$SmoothScroll(document.getElementById(this.listpostId), 250);
+    }
+
   },
 }
 </script>
@@ -104,43 +92,48 @@ export default {
         h1 {
             // padding-top: $mainPadding;
             padding-bottom: $mainPadding;
-            word-break: break-all;
+            // word-break: break-all;
             color: $mainBackground;
             font-size: 120px;
             font-weight: 900;
             line-height: 120px;
             margin: 0;
             // width: 50%;
-            float: right;
+            // float: right;
 
         }
 
         p {
             color: $mainBackground;
             margin: 0;
-            font-size: $thirdFontSize;
+            font-size: $secFontSize;
             // width: 50%;
             float: left;
         }
     }
 
     .navigationWrap {
+        cursor: pointer;
         width: 100%;
         clear: both;
-        font-size: $thirdFontSize;
+        font-size: $secFontSize;
         border-top: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         line-height: $mainHeaderHeight;
+        .border-right {
+            border-right: 1px solid $mainBackground;
 
-        div:first-of-type{
-          border-right: 1px solid $mainBackground;
+        }
 
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         div {
 
             word-spacing: $mainPadding;
-            
+
             text-align: center;
 
             // -ms-box-orient: horizontal;
@@ -182,7 +175,7 @@ export default {
     clear: both;
     color: $mainBackground;
     width: 50%;
-    margin-top: $mainPadding;
+    // margin-top: $mainPadding;
 
     p {
         font-size: $thirdFontSize;

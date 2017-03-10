@@ -9,6 +9,7 @@ import App from './App'
 
 import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
 import singlePost from './components/singlePost'
+import singlePostYear from './components/singlePostYear'
 import Indexpage from './components/Indexpage'
 // import Headermenu from './components/Headermenu'
 import Getgradyears from './components/Getgradyears'
@@ -38,6 +39,12 @@ const router = new VueRouter({
         path: 'work/:id',
         component: singlePost,
 
+      },
+      {
+        // UserProfile will be rendered inside User's <router-view>
+        // when /user/:id/profile is matched
+        path: 'year/:yearCategory',
+        component: singlePostYear,
 
       },
       // {
@@ -48,7 +55,21 @@ const router = new VueRouter({
       // }
     ]
   }
-  ]
+],
+scrollBehavior (to, from, savedPosition) {
+//   console.log(to)
+//   console.log(from)
+//   console.log(savedPosition)
+//   if (savedPosition) {
+//     return savedPosition
+//   } else {
+//     // return savedPosition
+//
+//
+//     return { x: 0, y: 0 }
+//   }
+}
+
 })
 
 // router.beforeEach((to, from, next) => {

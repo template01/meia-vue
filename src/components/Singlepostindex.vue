@@ -11,7 +11,8 @@
     <!-- </div> -->
 
     <div class="singleContentInner">
-      <router-link class="singleContentInnerLink" v-bind:to="'work/'+id"><span>→</span></router-link>
+      <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id}"><span>→</span></router-link>
+      <!-- <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id, query: { year: 'private' }}"><span>→</span></router-link> -->
       <div class="singleContentInnerRenderedWrapper">
         <div class="singleContentInnerRendered" v-html="postJsonContent">
         </div>
@@ -260,7 +261,8 @@ export default {
             border-right: $mainBorderStyle;
             text-decoration: none;
             color: $mainBackgroundBlack;
-            font-size: $mainFontSize;
+            // font-size: $mainFontSize;
+            font-size: $thirdFontSize;
             a {
                 }
 

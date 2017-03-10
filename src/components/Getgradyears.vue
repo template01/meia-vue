@@ -8,11 +8,11 @@
       <div class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
         <span v-on:click="clickPrev(index)" class="left">←</span>
-        <span>{{year.name}}</span>
+        <span>Graduation {{year.name}}</span>
         <span v-on:click="clickNext(index)" class="right">→</span>
       </div>
-      <Splashposts v-bind:categorylink="year._links['wp:post_type'][0].href"></Splashposts>
-      <Listposts v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
+      <Splashposts v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Splashposts>
+      <Listposts v-bind:id="'listPosts'+year.name" v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
     </div>
   </div>
 </div>
@@ -30,7 +30,8 @@ export default {
     return {
       yearWrapperHeight: [],
       gradyears: [],
-      collapsed: []
+      collapsed: [],
+      ListpostId:'iddd'
     }
   },
   created: function() {
@@ -104,9 +105,17 @@ export default {
     /* ease (default) */
     .yearNavigation {
 
+        position: fixed;
+        z-index: 999999999999999;
+        & + * {
+          margin-top: $mainHeaderHeight
+        }
+
         background: $mainBackgroundBlack;
         color: $mainBackground;
         border-bottom: 1px solid $mainBackground;
+
+        font-size: $secFontSize;
 
         // background: pink;
         // color: $mainBackgroundBlack;
@@ -173,6 +182,7 @@ span {
     font-size: $secFontSize;
     top:$secFontBaseLineShift;
     position: relative;
+    text-transform: uppercase;
 }
 
 .left {
