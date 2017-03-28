@@ -6,7 +6,7 @@ $mainFontHeavy:900;
 
 $mainFontSize: 30px;
 $secFontSize: 18px;
-$thirdFontSize: 20px;
+$thirdFontSize: 22px;
 
 
 // requires position relative
@@ -16,7 +16,9 @@ $mainBackground: ghostwhite;
 
 $mainBackgroundGrey: darkgrey;
 
-$mainBackgroundPink: pink;
+// $mainBackgroundPink: pink;
+// $mainBackgroundPink: mistyrose;
+$mainBackgroundPink: #ffe5e9;
 
 $mainBackgroundBlack: #424242;
 
@@ -27,6 +29,11 @@ $mainPadding: 20px;
 
 $mainBorderStyle: 1px solid $mainBackgroundBlack;
 
+// helpers
+
+.uppercase{
+  text-transform: uppercase;
+}
 
 *{
   font-family: $mainFont;

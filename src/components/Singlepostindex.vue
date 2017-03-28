@@ -9,13 +9,24 @@
 
   <div v-bind:class="{ expanded: showSingle }" class="singleContent">
     <!-- </div> -->
+    <router-link class="singleContentInnerLeftLink" v-if="postJsonContentFeaturedImage" v-bind:style="{ 'height': linkLineHeight+'px' }" v-bind:to="{ path: 'work/'+id}"><span>Read More</span></router-link>
+
 
     <div class="singleContentInner">
-      <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id}"><span>→</span></router-link>
+
+      <div class="singleContentInnerFeatured">
+        <img class="" v-if="postJsonContentFeaturedImage" v-bind:src="postJsonContentFeaturedImage" />
+
+
+      </div>
+      <router-link class="singleContentInnerLink" v-if="!postJsonContentFeaturedImage" v-bind:to="{ path: 'work/'+id}"><span>Read More</span></router-link>
       <!-- <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id, query: { year: 'private' }}"><span>→</span></router-link> -->
       <div class="singleContentInnerRenderedWrapper">
+        <!-- <img v-bind:src="postJsonContentFeaturedImage"/> -->
+
         <div class="singleContentInnerRendered" v-html="postJsonContent">
         </div>
+
       </div>
     </div>
   </div>
@@ -36,6 +47,8 @@ export default {
       showSingle: false,
       nameWidth: 0,
       postJsonContent: "",
+      linkLineHeight: 40,
+      postJsonContentFeaturedImage: "",
       name: ['Shemeka Mccullar', 'Craig Falgout', 'Pia Kos', 'Trish Staten', 'Dionna Gerber', 'Lilian Sano', 'Emmitt Casebeer', 'Jeanine Mollica', 'Preston Rouleau']
     }
   },
@@ -45,11 +58,26 @@ export default {
       this.showSingle = !this.showSingle
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts/' + id).then(function(response) {
 
-        if (this.postJsonContent.length === 0) {
+        // if (this.postJsonContent.length === 0) {
 
-          this.postJsonContent = response.body.excerpt.rendered
+        this.postJsonContent = response.body.excerpt.rendered
+        this.postJsonContentFeaturedImage = response.body.acf.featuredimage.sizes.large
+
+        if (this.showSingle) {
+          // console.log(this.postJsonContentFeaturedImage)
+          this.fitReadmore()
+
         }
+        // }
       })
+
+    },
+
+    fitReadmore: function() {
+      var vm = this
+      setTimeout(function() {
+        vm.linkLineHeight = vm.$el.querySelector('.singleContent').clientHeight - vm.$el.querySelector('.singleContentInnerRenderedWrapper').clientHeight - 1
+      }, 1000)
     },
 
     collapseSingle: function() {
@@ -112,7 +140,7 @@ export default {
     }
   },
   mounted: function() {
-
+    // console.log('mounted')
     this.fitTitles()
     var vm = this
     window.addEventListener("load", function load(event) {
@@ -146,9 +174,10 @@ export default {
 
 .single {
 
-  color: $mainBackgroundBlack;
+    color: $mainBackgroundBlack;
 
-    width: calc(100% - #{$mainHeaderHeight});
+    // width: calc(100% - #{$mainHeaderHeight});
+    width: 100%;
 
     .singleTitle {
         width: 100%;
@@ -161,12 +190,22 @@ export default {
         padding-left: $mainPadding;
         padding-right: $mainPadding;
 
+        &:hover {
+            color: $mainBackground;
+            background: $mainBackgroundBlack;
+        }
     }
 
     .singleRealName {
         // width: 20%;
         padding-left: $mainPadding;
         padding-right: $mainPadding;
+
+        &:hover {
+            color: $mainBackground;
+            background: $mainBackgroundBlack;
+        }
+
     }
 
     h1 {
@@ -179,8 +218,8 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        height: 140px;
-        line-height: 140px;
+        height: 130px;
+        line-height: 130px;
 
         span {
             padding: 100px $mainPadding;
@@ -215,6 +254,23 @@ export default {
         border-top: 0;
     }
 
+    &:first-child{
+      .singleRealTitle {
+
+          &:hover {
+            border-top: 1px solid $mainBackgroundPink;
+          }
+      }
+
+      .singleRealName {
+
+          &:hover {
+            border-top: 1px solid $mainBackgroundPink;
+          }
+
+      }
+    }
+
 }
 
 .singleContent {
@@ -225,12 +281,41 @@ export default {
     -webkit-transition: max-height 0.5s, border 0.5s;
     -moz-transition: max-height 0.5s, border 0.5s;
     transition: max-height 0.5s, border 0.5s;
+    position: relative;
     &.expanded {
-        max-height: 3000px;
+        max-height: 1000px;
         border-top: $mainBorderStyle;
-        -webkit-transition: max-height 0.5s, border 0.5s;
-        -moz-transition: max-height 0.5s, border 0.5s;
-        transition: max-height 0.5s, border 0.5s;
+        -webkit-transition: max-height 0.8s, border 0.8s;
+        -moz-transition: max-height 0.8s, border 0.8s;
+        transition: max-height 0.8s, border 0.8s;
+        transition-delay: 0.1s;
+
+    }
+
+    .singleContentInnerLeftLink {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        height: 100%;
+        width: 50%;
+        line-height: $mainHeaderHeight;
+        border-top: $mainBorderStyle;
+        color: $mainBackgroundBlack;
+        font-size: $secFontSize;
+        text-align: center;
+        text-decoration: none;
+        bottom: 0;
+
+        -webkit-transition: height 0.4s, background-color 0s;
+        -moz-transition: height 0.4s, background-color 0s;
+        transition: height 0.4s, background-color 0s;
+        &:hover {
+            color: $mainBackground;
+            background: $mainBackgroundBlack;
+            // transition-delay: 0.15s;
+        }
+
     }
 
     .singleContentInner {
@@ -238,35 +323,60 @@ export default {
         position: relative;
         .singleContentInnerRenderedWrapper {
             padding: $mainPadding;
-            width: calc(50% + #{$mainHeaderHeight/2});
-            // width: 50%;
+            background: $mainBackgroundPink;
+            // width: calc(50% + #{$mainHeaderHeight/2});
+            z-index: 9;
+            width: 50%;
             // float: left;
             // display: inline-block;
             p {
                 font-size: 30px;
             }
+
         }
+
         .singleContentInnerLink {
 
             display: flex;
             align-items: center;
             justify-content: center;
-            // background: $mainBackgroundGrey;
-            width: calc(50% - #{$mainHeaderHeight/2});
-
+            width: 50%;
             position: absolute;
             height: 100%;
             right: 0;
             border-left: $mainBorderStyle;
-            border-right: $mainBorderStyle;
             text-decoration: none;
             color: $mainBackgroundBlack;
-            // font-size: $mainFontSize;
-            font-size: $thirdFontSize;
-            a {
-                }
-
+            font-size: $secFontSize;
+            &:hover {
+                color: $mainBackground;
+                background: $mainBackgroundBlack;
+                // transition-delay: 0.15s;
+            }
         }
+        .singleContentInnerFeatured {
+
+            // display: flex;
+            // align-items: center;
+            // justify-content: center;
+            width: 50%;
+            // position: absolute;
+            // height: 100%;
+            float: right;
+            right: 0;
+            border-left: $mainBorderStyle;
+            text-decoration: none;
+            color: $mainBackgroundBlack;
+            font-size: $thirdFontSize;
+
+            img {
+                width: calc(100% - #{$mainPadding*0});
+                padding: $mainPadding;
+                display: block;
+                margin: 0;
+            }
+        }
+
     }
     &:empty {
         display: none;

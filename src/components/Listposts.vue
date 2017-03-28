@@ -1,7 +1,7 @@
 <template>
 <!-- <div v-bind:style="{'max-height':listHeight+'px'}" class="slideIn listSingle"> -->
 <div id="listPostWrapper" class="slideIn listSingle">
-  <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages>
+  <!-- <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages> -->
   <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
   <div class="listPostsWrapper" v-bind:class="{ collapsed: hidePostList }">
     <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
@@ -12,14 +12,14 @@
 <script>
 import Listposts from './Listposts'
 import Singlepostindex from './Singlepostindex'
-import ListpostsImages from './ListpostsImages'
+// import ListpostsImages from './ListpostsImages'
 
 export default {
   props: ['categoryyear', 'categorylink', 'index'],
   components: {
     Listposts,
     Singlepostindex,
-    ListpostsImages
+    // ListpostsImages
   },
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
 }
 //
 .listPostsWrapper {
-    max-height: 3000px;
+    // max-height: 3000px;
     overflow: hidden;
     -webkit-transition: max-height 0.5s;
     -moz-transition: max-height 0.5s;

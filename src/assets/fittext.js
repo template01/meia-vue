@@ -1,8 +1,8 @@
-/*!	
+/*!
 * FitText.js 1.0 jQuery free version
 *
-* Copyright 2011, Dave Rupert http://daverupert.com 
-* Released under the WTFPL license 
+* Copyright 2011, Dave Rupert http://daverupert.com
+* Released under the WTFPL license
 * http://sam.zoy.org/wtfpl/
 * Modified by Slawomir Kolodziej http://slawekk.info
 *
@@ -16,7 +16,7 @@
 		else
 			el.attachEvent('on'+type, fn);
   };
-  
+
   var extend = function(obj,ext){
     for(var key in ext)
       if(ext.hasOwnProperty(key))
@@ -27,8 +27,8 @@
   window.fitText = function (el, kompressor, options) {
 
     var settings = extend({
-      'minFontSize' : 20,
-      'maxFontSize' : 120
+      'minFontSize' : 32,
+      'maxFontSize' : 90
     },options);
 
     var fit = function (el) {

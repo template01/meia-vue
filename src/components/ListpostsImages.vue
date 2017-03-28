@@ -136,6 +136,7 @@ export default {
 
                     a {
                         text-decoration: none;
+                        color: $mainBackgroundBlack;
                     }
                     .swiper-titleText {
                         background: $mainBackground;

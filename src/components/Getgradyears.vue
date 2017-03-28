@@ -7,9 +7,9 @@
 
       <div class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
-        <span v-on:click="clickPrev(index)" class="left">←</span>
-        <span>Graduation {{year.name}}</span>
-        <span v-on:click="clickNext(index)" class="right">→</span>
+        <span v-on:click="clickPrev(index)" class="left">← Past Year</span>
+        <span class="uppercase">Graduation {{year.name}}</span>
+        <span v-on:click="clickNext(index)" class="right">Next Year →</span>
       </div>
       <Splashposts v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Splashposts>
       <Listposts v-bind:id="'listPosts'+year.name" v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
@@ -67,10 +67,14 @@ export default {
     clickNext: function(index) {
       this.$set(this.collapsed, index, true)
       this.$set(this.collapsed, index + 1, false)
+      this.$SmoothScroll(0, 500);
+
     },
     clickPrev: function(index) {
       this.$set(this.collapsed, index, true)
       this.$set(this.collapsed, index - 1, false)
+      this.$SmoothScroll(0, 500);
+
     },
 
   }
@@ -84,9 +88,14 @@ export default {
 .slideOut {
     height: 0 !important;
     overflow: hidden !important;
+
+    .yearNavigation{
+
+      display: none !important;
+    }
 }
 #yearOuterWrapper{
-  background: pink;
+  background: $mainBackgroundPink;
 }
 .yearSingle {
 
@@ -112,8 +121,11 @@ export default {
         }
 
         background: $mainBackgroundBlack;
-        color: $mainBackground;
-        border-bottom: 1px solid $mainBackground;
+        color: $mainBackgroundPink;
+        // color: $mainBackground;
+
+        // border-bottom: 1px solid $mainBackground;
+        border-bottom: 1px solid $mainBackgroundPink;
 
         font-size: $secFontSize;
 
@@ -182,7 +194,6 @@ span {
     font-size: $secFontSize;
     top:$secFontBaseLineShift;
     position: relative;
-    text-transform: uppercase;
 }
 
 .left {

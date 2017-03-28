@@ -36,6 +36,8 @@ const router = new VueRouter({
       {
         // UserProfile will be rendered inside User's <router-view>
         // when /user/:id/profile is matched
+        name: 'work',
+
         path: 'work/:id',
         component: singlePost,
 
@@ -43,6 +45,8 @@ const router = new VueRouter({
       {
         // UserProfile will be rendered inside User's <router-view>
         // when /user/:id/profile is matched
+        name: 'year',
+
         path: 'year/:yearCategory',
         component: singlePostYear,
 
@@ -57,8 +61,19 @@ const router = new VueRouter({
   }
 ],
 scrollBehavior (to, from, savedPosition) {
-//   console.log(to)
-//   console.log(from)
+  console.log(to)
+  console.log(from)
+  var scrolltop = (window.pageYOffset || document.scrollTop)  - (document.clientTop || 0);
+  console.log(scrolltop)
+
+  if(to.name == 'year' || to.name == 'work'){
+    window.scrollTo(0,0)
+  }
+
+  if(to.name == 'home' ){
+    window.scrollTo(0,scrolltop)
+
+  }
 //   console.log(savedPosition)
 //   if (savedPosition) {
 //     return savedPosition

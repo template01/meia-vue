@@ -28,7 +28,7 @@ export default {
       // console.log(window.scroll)
       // console.log(window.scroll())
       // this.$SmoothScroll(target,duration,callback,context);
-      this.$SmoothScroll(document.getElementById('footer'), 500);
+      this.$SmoothScroll(document.getElementById('footer').offsetTop-40, 500);
       // window.scrollTo({ top: 1000, left: 0, behavior: 'smooth' });
     }
   }

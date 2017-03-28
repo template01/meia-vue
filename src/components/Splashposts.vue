@@ -5,11 +5,12 @@
   <div class="titleWrap">
     <h1>{{yearTitle}}</h1>
   </div>
-  <div v-html="splashContent" class="blurbWrap">
+  <div v-html="splashExcerpt" class="blurbWrap">
   </div>
   <div class="navigationWrap">
     <div class="border-right" v-on:click="goToGraduates()">
-      <span>Graduates ↓</span>
+      <!-- <span>Graduates ↓</span> -->
+      <span>Graduates</span>
     </div>
     <router-link class="singleContentInnerLink" v-bind:to="'year/'+'2014-2016'">
       <div>
@@ -34,7 +35,7 @@ export default {
     return {
       hidePostList: false,
       yearTitle: '',
-      splashContent: '',
+      splashExcerpt: '',
       showSplash: true
     }
   },
@@ -45,7 +46,7 @@ export default {
     this.$http.get(this.categorylink + '&tags=13').then(function(response) {
       if (response.body.length > 0) {
         this.yearTitle = response.body[0].title.rendered
-        this.splashContent = response.body[0].content.rendered
+        this.splashExcerpt = response.body[0].acf.excerpt
 
       }
 
@@ -64,7 +65,7 @@ export default {
         // this.postJsonContent = ''
     },
     goToGraduates: function() {
-      this.$SmoothScroll(document.getElementById(this.listpostId), 250);
+      this.$SmoothScroll(document.getElementById(this.listpostId).offsetTop-79, 250);
     }
 
   },
@@ -76,7 +77,9 @@ export default {
 
 .splashPost {
     background: $mainBackgroundBlack;
-    color: $mainBackground;
+    // color: $mainBackground;
+    color: $mainBackgroundPink;
+
 
     max-height: 0;
     overflow: hidden;
@@ -93,10 +96,12 @@ export default {
             // padding-top: $mainPadding;
             padding-bottom: $mainPadding;
             // word-break: break-all;
-            color: $mainBackground;
-            font-size: 120px;
+            // color: $mainBackground;
+
+            color: $mainBackgroundPink;
+            font-size: 90px;
             font-weight: 900;
-            line-height: 120px;
+            line-height: 90px;
             margin: 0;
             // width: 50%;
             // float: right;
@@ -104,7 +109,9 @@ export default {
         }
 
         p {
-            color: $mainBackground;
+            // color: $mainBackground;
+            color: $mainBackgroundPink;
+
             margin: 0;
             font-size: $secFontSize;
             // width: 50%;
@@ -117,11 +124,14 @@ export default {
         width: 100%;
         clear: both;
         font-size: $secFontSize;
-        border-top: 1px solid $mainBackground;
+        border-top: 1px solid $mainBackgroundPink;
+        // border-top: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         line-height: $mainHeaderHeight;
         .border-right {
-            border-right: 1px solid $mainBackground;
+          // border-right: 1px solid $mainBackground;
+          border-right: 1px solid $mainBackgroundPink;
+
 
         }
 
@@ -132,7 +142,7 @@ export default {
 
         div {
 
-            word-spacing: $mainPadding;
+            // word-spacing: $mainPadding;
 
             text-align: center;
 
@@ -173,7 +183,9 @@ export default {
     padding: $mainPadding;
 
     clear: both;
-    color: $mainBackground;
+    // color: $mainBackground;
+    color: $mainBackgroundPink;
+
     width: 50%;
     // margin-top: $mainPadding;
 

@@ -6,9 +6,9 @@
     <h1 class="headerElement alignRight" v-text="">Index</h1>
 
   </div>
-  <div class="postcontetWrapper">
+  <div class="postcontentWrapper">
     <div class="left">
-      <p class="postcontetWrapperTitle" >{{postJsonTitle}}</p>
+      <p class="postcontentWrapperTitle" >{{postJsonTitle}}</p>
 
       <div v-html="postJsonContentMedia"></div>
     </div>
@@ -77,7 +77,7 @@ export default {
 
         color: $mainBackgroundBlack;
 
-        background: $mainBackground;
+        background: $mainBackgroundPink;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -109,32 +109,49 @@ export default {
         }
     }
 
-    .postcontetWrapper {
+    .postcontentWrapper {
         img {
             max-width: 10px;
         }
         width: 100%;
         clear: both;
-        display: inline-block;
+
+        display: box;
+        display: -moz-box;
+        -moz-box-orient: horizontal;
+        display: -webkit-box;
+        -webkit-box-orient: horizontal;
+        box-orient: horizontal;
+        background: $mainBackgroundPink;
+        padding-bottom:  $mainPadding*2;
+
 
         .left {
+          background: $mainBackgroundPink;
             width: 50%;
-            float: left;
+            -moz-box-flex: 1.0;
+            -webkit-box-flex: 1.0;
+            -ms-flex: 1.0;
+            box-flex: 1.0;
             padding: $mainPadding;
             padding-top: $mainPadding*2;
             border-right: $mainBorderStyle;
 
-            .postcontetWrapperTitle{
+            .postcontentWrapperTitle{
               font-size: $thirdFontSize;
               text-transform: uppercase;
               margin-bottom: $mainPadding*2;
             }
         }
         .right {
+          background: $mainBackgroundPink;
           padding: $mainPadding;
           padding-top: $mainPadding*2;
             width: 50%;
-            float: right;
+            -moz-box-flex: 1.0;
+            -webkit-box-flex: 1.0;
+            -ms-flex: 1.0;
+            box-flex: 1.0;
         }
 
     }
@@ -144,7 +161,9 @@ export default {
 
 <style lang="scss">@import "../scss/globalVars.scss";
 .singlePost {
-    .postcontetWrapper {
+    .postcontentWrapper {
+
+      color: $mainBackgroundBlack;
 
               .left {
                 p:first-of-type{
