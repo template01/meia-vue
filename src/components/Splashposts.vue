@@ -3,16 +3,16 @@
 <!-- <div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }"> -->
 <div class="splashPost" v-bind:class="{ expanded: showSplash }">
   <div class="titleWrap">
-    <h1>{{yearTitle}}</h1>
+    <h1 v-bind:style="{color:this.yearColor}">{{yearTitle}}</h1>
   </div>
-  <div v-html="splashExcerpt" class="blurbWrap">
+  <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
   </div>
-  <div class="navigationWrap">
-    <div class="border-right" v-on:click="goToGraduates()">
+  <div v-bind:style="{color:this.yearColor, 'border-color':this.yearColor}" class="navigationWrap">
+    <div v-bind:style="{'border-color':this.yearColor}" class="border-right" v-on:click="goToGraduates()">
       <!-- <span>Graduates ↓</span> -->
       <span>Graduates</span>
     </div>
-    <router-link class="singleContentInnerLink" v-bind:to="'year/'+'2014-2016'">
+    <router-link class="singleContentInnerLink" v-bind:to="'year/'+year">
       <div>
         <span><span>Read More</span></span>
       </div>
@@ -24,26 +24,28 @@
 
 <script>
 export default {
-  props: ['categorylink', 'listpostId'],
+  props: ['categorylink', 'listpostId', 'yearColor','year'],
   components: {
     // Listposts,
     // Splashposts
     // Singlepostindex,
     // ListpostsImages
   },
+
   data() {
     return {
       hidePostList: false,
       yearTitle: '',
       splashExcerpt: '',
-      showSplash: true
+      showSplash: true,
+      // yearColor:''
     }
   },
   created: function() {
     // console.log(this.categorylink)
     // INCLUDE YEAR SPLASH (ID=13) TAGS!
     //
-    this.$http.get(this.categorylink + '&tags=13').then(function(response) {
+    this.$http.get(this.categorylink).then(function(response) {
       if (response.body.length > 0) {
         this.yearTitle = response.body[0].title.rendered
         this.splashExcerpt = response.body[0].acf.excerpt
@@ -78,7 +80,7 @@ export default {
 .splashPost {
     background: $mainBackgroundBlack;
     // color: $mainBackground;
-    color: $mainBackgroundPink;
+    color: red;
 
 
     max-height: 0;
@@ -98,7 +100,7 @@ export default {
             // word-break: break-all;
             // color: $mainBackground;
 
-            color: $mainBackgroundPink;
+            // color: red;
             font-size: 90px;
             font-weight: 900;
             line-height: 90px;
@@ -110,7 +112,7 @@ export default {
 
         p {
             // color: $mainBackground;
-            color: $mainBackgroundPink;
+            color: $mainBackgroundBlack;
 
             margin: 0;
             font-size: $secFontSize;
@@ -124,13 +126,13 @@ export default {
         width: 100%;
         clear: both;
         font-size: $secFontSize;
-        border-top: 1px solid $mainBackgroundPink;
+        border-top: 1px solid red;
         // border-top: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         line-height: $mainHeaderHeight;
         .border-right {
           // border-right: 1px solid $mainBackground;
-          border-right: 1px solid $mainBackgroundPink;
+          border-right: 1px solid red;
 
 
         }
@@ -184,7 +186,7 @@ export default {
 
     clear: both;
     // color: $mainBackground;
-    color: $mainBackgroundPink;
+    color: red;
 
     width: 50%;
     // margin-top: $mainPadding;

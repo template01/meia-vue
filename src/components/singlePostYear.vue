@@ -9,22 +9,31 @@
 
 <template>
 <div class="singlePostYear">
-  <div class="signlePostHeader">
-    <h1 class="headerElement">Graduation description</h1>
-    <h1 class="headerElement alignCenter">Graduation {{year}}</h1>
-    <h1 class="headerElement alignRight" v-text="">Index</h1>
+
+
+    <div v-if="!singleLoaded" class="singleLoaded">
+
+        <h1 class="headerElement">Loading</h1>
+
+    </div>
+
+
+  <div v-bind:style="{'border-color':yearColor}" class="signlePostHeader">
+    <h1 v-bind:style="{color:yearColor}" class="headerElement">Graduation description</h1>
+    <h1 v-bind:style="{color:yearColor}" class="headerElement alignCenter">Graduation {{year}}</h1>
+    <h1 v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text="">Index</h1>
   </div>
-  <div class="postcontentWrapper">
-    <div class="postcontentWrapperTitle">
-      <p>{{postJsonTitle}}</p>
+  <div   class="postcontentWrapper">
+    <div  class="postcontentWrapperTitle">
+      <p v-bind:style="{color:yearColor}">{{postJsonTitle}}</p>
 
     </div>
     <div class="postcontentWrapperInner">
       <div class="left">
-        <p class="splashExcerpt" v-html="splashExcerpt"></p>
+        <p v-bind:style="{color:yearColor}" class="splashExcerpt" v-html="splashExcerpt"></p>
         <div v-html="postJsonContentMedia"></div>
       </div>
-      <div class="right" v-html="postJsonContent"></div>
+      <div v-bind:style="{background:yearColor}" class="right" v-html="postJsonContent"></div>
     </div>
 
 
@@ -41,16 +50,16 @@ export default {
     showIndex: {
       type: Boolean,
       default: true
-    }
+    },
   },
+
 
   methods: {
     getContent: function(yearCategory) {
 
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?search=' + yearCategory).then(function(response) {
-        this.$http.get(response.body[0]._links['wp:post_type'][0].href + '&tags=13').then(function(response) {
-          console.log(response)
-          this.postJsonContent = response.body[0].content.rendered
+        this.$http.get(response.body[0]._links['wp:post_type'][1].href ).then(function(response) {
+          this.postJsonContent = response.body[0].acf.text_field
           this.postJsonTitle = response.body[0].title.rendered
           this.splashExcerpt = response.body[0].acf.excerpt
           this.postJsonContentMedia = response.body[0].acf.media_field
@@ -59,6 +68,14 @@ export default {
 
           this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories/' + response.body[0].categories[0]).then(function(response) {
             this.year = response.body.name
+            this.yearColor = response.body.acf.yearcolor
+
+            var vm = this
+            setTimeout(function(){
+              vm.singleLoaded = true;
+              // vm.indexLoaded = true
+            },500)
+
           })
 
         })
@@ -81,7 +98,9 @@ export default {
       postJsonTitle: '',
       postJsonContentMedia: '',
       year: '',
-      splashExcerpt: ''
+      splashExcerpt: '',
+      yearColor:'',
+      singleLoaded:false
 
     }
   },
@@ -91,13 +110,35 @@ export default {
 
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
+
+.singleLoaded{
+  background-color: $mainBackgroundBlack;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index:99999999999;
+  display: flex;
+  .headerElement {
+    margin: 0;
+    color: $mainBackground;
+    text-transform: uppercase;
+    font-weight: normal;
+
+      width: 33.33333%;
+      font-size: $secFontSize;
+      padding: $mainPadding;
+      padding-top: $mainPadding/1.8;
+      // top: $secFontBaseLineShift;
+  }
+}
+
 .singlePostYear {
     .signlePostHeader {
         // background: red;
 
         position: fixed;
         width: 100%;
-        z-index: 999999999999999;
+        z-index: 999;
         & + * {
             margin-top: $mainHeaderHeight;
         }
@@ -110,12 +151,12 @@ export default {
         justify-content: center;
         height: $mainHeaderHeight;
         border-top: $mainBorderStyle;
-        border-bottom: 1px solid $mainBackgroundPink;
+        border-bottom: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         background: $mainBackgroundBlack;
 
         .headerElement {
-            color: $mainBackgroundPink;
+            color: $mainBackground;
             text-transform: uppercase;
             font-weight: normal;
             margin: 0;
@@ -155,7 +196,7 @@ export default {
                 margin: 0;
                 line-height: 90px;
                 font-weight: 900;
-                color: $mainBackgroundPink;
+                color: $mainBackground;
                 margin-bottom: $mainPadding;
 
             }
@@ -185,11 +226,11 @@ export default {
                 padding: $mainPadding*2 $mainPadding $mainPadding;
                 border-right: $mainBorderStyle;
                 background: $mainBackgroundBlack;
-                color: $mainBackgroundPink;
+                color: $mainBackground;
 
             }
             .right {
-              background: $mainBackgroundPink;
+              background: $mainBackground;
                 padding: $mainPadding*2 $mainPadding $mainPadding;
                 width: 50%;
                 -moz-box-flex: 1.0;

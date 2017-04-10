@@ -177,7 +177,7 @@ export default {
     right: 0;
     bottom: 0;
     z-index: 1;
-    background: $mainBackgroundPink;
+    background: $mainBackground;
     width: $mainHeaderHeight+1;
     /* line-height of .wrapper div:first-child span */
     overflow: hidden;

@@ -1,18 +1,24 @@
-<template>
+ <template>
 <div>
-  <div id="yearOuterWrapper">
-    <!-- {{this.collapsed}} -->
 
-    <div class="yearSingle" v-bind:class="{ slideOut: collapsed[index] }" v-for="(year, index) in gradyears">
+  <div v-if="!indexLoaded" class="indexLoaded">
 
-      <div class="yearNavigation">
+    <h1 class="headerElement">Loading</h1>
+
+  </div>
+  <div v-bind:style="" id="yearOuterWrapper">
+    <!-- <div v-for="(color, index) in yearColors">{{color}}</div> -->
+    <div v-bind:style="{color:year.acf.yearcolor}" class="yearSingle" v-bind:class="{ slideOut: collapsed[index] }" v-for="(year, index) in gradyears">
+      <div v-bind:style="{'border-color':year.acf.yearcolor}" class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
         <span v-on:click="clickPrev(index)" class="left">← Past Year</span>
         <span class="uppercase">Graduation {{year.name}}</span>
         <span v-on:click="clickNext(index)" class="right">Next Year →</span>
       </div>
-      <Splashposts v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Splashposts>
-      <Listposts v-bind:id="'listPosts'+year.name" v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][0].href"></Listposts>
+
+
+      <Splashposts v-bind:yearColor="year.acf.yearcolor" v-bind:year="year.name" v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][1].href"></Splashposts>
+      <Listposts v-on:stopIndexLoad="stopIndexLoad()" v-bind:yearColor="year.acf.yearcolor" v-bind:style="{'background':year.acf.yearcolor}" v-bind:id="'listPosts'+year.name" v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][2].href"></Listposts>
     </div>
   </div>
 </div>
@@ -24,25 +30,32 @@ import Splashposts from './Splashposts'
 
 export default {
   components: {
-    Listposts,Splashposts
+    Listposts,
+    Splashposts
   },
   data() {
     return {
       yearWrapperHeight: [],
       gradyears: [],
       collapsed: [],
-      ListpostId:'iddd'
+      ListpostId: 'iddd',
+      indexLoaded: false,
+      homeVisited: false
     }
   },
   created: function() {
 
     if (this.gradyears.length === 0) {
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8').then(function(response) {
-        // console.log(response)
         this.gradyears = response.body
         this.attachExtras()
+
+
       })
+
+      // year._links['wp:post_type'][1].href
     }
+
 
   },
   computed: {
@@ -50,7 +63,31 @@ export default {
 
     }
   },
+
+  watch: {
+    '$route' (to, from) {
+
+      if (to.path === '/' && this.homeVisited === false) {
+        this.indexLoaded = false
+        this.stopIndexLoad()
+
+      }
+
+      if (from.path === '/') {
+        this.homeVisited = true
+      }
+
+    }
+  },
+
   methods: {
+
+    stopIndexLoad: function() {
+      var vm = this
+      setTimeout(function() {
+        vm.indexLoaded = true
+      }, 500)
+    },
     attachExtras: function() {
       var vueInstance = this
 
@@ -82,20 +119,39 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-@import "../scss/globalVars.scss";
+<style lang="scss" scoped>@import "../scss/globalVars.scss";
+
+.indexLoaded {
+    background-color: $mainBackgroundBlack;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 99999999999;
+    display: flex;
+    .headerElement {
+        margin: 0;
+        color: $mainBackground;
+        text-transform: uppercase;
+        font-weight: normal;
+
+        width: 33.33333%;
+        font-size: $secFontSize;
+        padding: $mainPadding/1.8 $mainPadding $mainPadding;
+        // top: $secFontBaseLineShift;
+    }
+}
 
 .slideOut {
     height: 0 !important;
     overflow: hidden !important;
 
-    .yearNavigation{
+    .yearNavigation {
 
-      display: none !important;
+        display: none !important;
     }
 }
-#yearOuterWrapper{
-  background: $mainBackgroundPink;
+#yearOuterWrapper {
+    background: $mainBackground;
 }
 .yearSingle {
 
@@ -115,36 +171,26 @@ export default {
     .yearNavigation {
 
         position: fixed;
-        z-index: 999999999999999;
+        z-index: 999;
         & + * {
-          margin-top: $mainHeaderHeight
+            margin-top: $mainHeaderHeight;
         }
-
         background: $mainBackgroundBlack;
-        color: $mainBackgroundPink;
-        // color: $mainBackground;
-
-        // border-bottom: 1px solid $mainBackground;
-        border-bottom: 1px solid $mainBackgroundPink;
-
+        border-bottom: 1px solid $mainBackground;
         font-size: $secFontSize;
-
-        // background: pink;
-        // color: $mainBackgroundBlack;
-
         height: $mainHeaderHeight;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         // cursor: pointer;
-        .left{
-          text-align: left;
-          padding: $mainPadding;
+        .left {
+            text-align: left;
+            padding: $mainPadding;
         }
-        .right{
-          text-align: right;
-          padding: $mainPadding;
+        .right {
+            text-align: right;
+            padding: $mainPadding;
         }
     }
     &:not(first-of-type) {
@@ -192,13 +238,7 @@ span {
     width: 33.33333%;
     text-align: center;
     font-size: $secFontSize;
-    top:$secFontBaseLineShift;
+    top: $secFontBaseLineShift;
     position: relative;
-}
-
-.left {
-    // align-self: left;
-    // text-align: right;
-    // margin-left: auto;
 }
 </style>

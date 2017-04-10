@@ -4,7 +4,7 @@
   <!-- <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages> -->
   <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
   <div class="listPostsWrapper" v-bind:class="{ collapsed: hidePostList }">
-    <singlepostindex v-for="(project, index) in projects" v-bind:index="index" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
+    <singlepostindex v-bind:yearColor="yearColor" v-for="(project, index) in projects" v-bind:index="index" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
   </div>
 </div>
 </template>
@@ -15,7 +15,7 @@ import Singlepostindex from './Singlepostindex'
 // import ListpostsImages from './ListpostsImages'
 
 export default {
-  props: ['categoryyear', 'categorylink', 'index'],
+  props: ['categoryyear', 'categorylink', 'index', 'yearColor','parentId'],
   components: {
     Listposts,
     Singlepostindex,
@@ -34,11 +34,13 @@ export default {
     }
   },
   created: function() {
-    console.log(this.categorylink)
+
+
+    // console.log(this.categorylink)
     // EXCLUDE YEAR SPLASH (ID=13) TAGS!
 
     if (this.projects.length === 0) {
-      this.$http.get(this.categorylink+'&tags_exclude=13').then(function(response) {
+      this.$http.get(this.categorylink).then(function(response) {
         // console.log(response)
         this.projects = response.body
 
@@ -52,7 +54,7 @@ export default {
 
             this.worktitles.push(this.projects[i].title.rendered)
             this.workstudents.push(this.projects[i].acf.student_name)
-              // console.log(this.projects[i].acf.featuredimage)
+            // console.log(this.projects[i].acf.featuredimage)
             if (this.projects[i].acf.featuredimage) {
 
               this.featuredimages.push({
@@ -66,6 +68,15 @@ export default {
       })
     }
 
+
+
+
+  },
+
+  mounted:function() {
+    this.attachExtraStyle()
+
+    this.$emit('stopIndexLoad')
   },
 
 
@@ -73,6 +84,42 @@ export default {
     toggleHidePostList: function() {
       this.hidePostList = !this.hidePostList
     },
+
+
+
+    attachExtraStyle: function() {
+
+      var vm = this
+
+      console.log(this.$el.getAttribute('id'))
+      document.head.insertAdjacentHTML('beforeend',
+        `<style>
+              #`+this.$el.getAttribute('id')+` .single:first-child .singleRealTitle:hover {
+                          border-top: 1px solid `+ this.yearColor+`;
+              }
+              #`+this.$el.getAttribute('id')+` .single:first-child .singleRealName:hover {
+                          border-top: 1px solid `+ this.yearColor+`;
+              }
+
+              #`+this.$el.getAttribute('id')+` .single .singleRealTitle:hover {
+                          color:`+ this.yearColor+`;
+              }
+              #`+this.$el.getAttribute('id')+` .single .singleRealName:hover {
+                          color:`+ this.yearColor+`;
+              }
+
+              #`+this.$el.getAttribute('id')+` .singleContent .singleContentInnerLeftLink:hover {
+                          color:`+ this.yearColor+`;
+              }
+
+              #`+this.$el.getAttribute('id')+` .singleContent .singleContentInnerLink:hover {
+                          color:`+ this.yearColor+`;
+              }
+
+          </style>`
+      );
+    },
+
   },
 }
 </script>

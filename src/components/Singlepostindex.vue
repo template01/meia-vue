@@ -1,6 +1,7 @@
 <template>
 <div class="single">
-  <div class="singleTitle" v-on:click="expandSingle(id)">
+  <div class="singleTitle" v-bind:style="" v-on:click="expandSingle(id)">
+
     <h1 class="singleRealName" v-html="workstudent"></h1>
     <h1 v-bind:id="id" class="singleRealTitle" v-bind:style="{ width: 'calc(100% - '+ nameWidth + 'px)' }" v-html="title" v-bind:class="addTitleLengthClass"></h1>
     <!-- <h1><span>{{ pickRandomName }}</span><span v-bind:id="id" v-bind:class="addTitleLengthClass">{{title}}</span></h1> -->
@@ -15,21 +16,34 @@
     <div class="singleContentInner">
 
       <div class="singleContentInnerFeatured">
-        <img class="" v-if="postJsonContentFeaturedImage" v-bind:src="postJsonContentFeaturedImage" />
+        <!-- <img class="" v-if="postJsonContentFeaturedImage" v-bind:src="postJsonContentFeaturedImage" /> -->
 
+        <img v-bind:style="{ 'height': featuredImageCalculatedHeight }" v-if="postJsonContentFeaturedImage" v-lazy="postJsonContentFeaturedImage" />
+        <!-- <p class="loadingText" v-show="!postJsonContentFeaturedImageLoaded">loading</p> -->
+        <!-- <p class="loadingText" >loading</p> -->
+        <div v-show="!postJsonContentFeaturedImageLoaded" v-if="postJsonContentFeaturedImage" class="loadingText">
+          <span>
+            Loading
+          </span>
+        </div>
 
       </div>
       <router-link class="singleContentInnerLink" v-if="!postJsonContentFeaturedImage" v-bind:to="{ path: 'work/'+id}"><span>Read More</span></router-link>
       <!-- <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id, query: { year: 'private' }}"><span>→</span></router-link> -->
-      <div class="singleContentInnerRenderedWrapper">
-        <!-- <img v-bind:src="postJsonContentFeaturedImage"/> -->
-
-        <div class="singleContentInnerRendered" v-html="postJsonContent">
+      <template v-if="postJsonContentFeaturedImage">
+        <div class="singleContentInnerRenderedWrapper" v-bind:style="{ 'margin-bottom': linkLineHeight+'px' }">
+          <div class="singleContentInnerRendered" v-bind:style="{background:yearColor}"  v-html="postJsonContent">
+          </div>
         </div>
-
-      </div>
-    </div>
-  </div>
+      </template>
+      <template v-else>
+        <div class="singleContentInnerRenderedWrapper">
+          <div class="singleContentInnerRendered" v-html="postJsonContent">
+          </div>
+        </div>
+      </template>
+</div>
+</div>
 </div>
 </template>
 
@@ -41,14 +55,17 @@ import alertTest from '../assets/alert.js'
 
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'projectslength', 'id', 'workstudent'],
+  props: ['title', 'index', 'projectslength', 'id', 'workstudent','yearColor'],
   data() {
     return {
       showSingle: false,
       nameWidth: 0,
       postJsonContent: "",
       linkLineHeight: 40,
+      postJsonContentFeaturedImageWidth: 0,
       postJsonContentFeaturedImage: "",
+      postJsonContentFeaturedImageLoaded: false,
+      featuredImageCalculatedHeight: '',
       name: ['Shemeka Mccullar', 'Craig Falgout', 'Pia Kos', 'Trish Staten', 'Dionna Gerber', 'Lilian Sano', 'Emmitt Casebeer', 'Jeanine Mollica', 'Preston Rouleau']
     }
   },
@@ -56,16 +73,19 @@ export default {
     expandSingle: function(id) {
       // alert('expaaand')
       this.showSingle = !this.showSingle
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts/' + id).then(function(response) {
+      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/yearpost/' + id).then(function(response) {
 
         // if (this.postJsonContent.length === 0) {
 
-        this.postJsonContent = response.body.excerpt.rendered
+        this.postJsonContent = response.body.acf.excerpt_field
         this.postJsonContentFeaturedImage = response.body.acf.featuredimage.sizes.large
-
+        this.postJsonContentFeaturedImageWidth = this.$el.querySelector('.singleContentInnerFeatured').clientWidth
+        this.postJsonContentFeaturedImageRelation = response.body.acf.featuredimage.sizes['large-height'] / response.body.acf.featuredimage.sizes['large-width']
         if (this.showSingle) {
           // console.log(this.postJsonContentFeaturedImage)
-          this.fitReadmore()
+          this.lazyLoadHandleLoaded()
+          this.lazyLoadHandleLoading()
+
 
         }
         // }
@@ -83,6 +103,53 @@ export default {
     collapseSingle: function() {
       this.showSingle = !this.showSingle
         // this.postJsonContent = ''
+    },
+
+    lazyLoadHandleLoaded: function() {
+      var vm = this
+
+
+      this.$Lazyload.$once('loaded', function({
+        bindType,
+        el,
+        naturalHeight,
+        naturalWidth,
+        $parent,
+        src,
+        loading,
+        error
+      }, formCache) {
+        // console.log(el)
+        vm.fitReadmore()
+        vm.postJsonContentFeaturedImageLoaded = true
+        console.log('LOADED')
+        console.log(naturalHeight)
+        vm.featuredImageCalculatedHeight = 'initial'
+
+
+      })
+    },
+
+    lazyLoadHandleLoading: function() {
+      var vm = this
+
+      this.$Lazyload.$once('loading', function({
+        bindType,
+        el,
+        naturalHeight,
+        naturalWidth,
+        $parent,
+        src,
+        loading,
+        error
+      }, formCache) {
+        console.log('just loading')
+        console.log(el)
+        console.log(vm.postJsonContentFeaturedImageRelation)
+
+        vm.featuredImageCalculatedHeight = vm.postJsonContentFeaturedImageRelation * vm.postJsonContentFeaturedImageWidth + 'px'
+          // postJsonContentFeaturedImageRelation*postJsonContentFeaturedImageWidth+'px'
+      })
     },
 
     fitTitles: function() {
@@ -141,6 +208,7 @@ export default {
   },
   mounted: function() {
     // console.log('mounted')
+
     this.fitTitles()
     var vm = this
     window.addEventListener("load", function load(event) {
@@ -161,6 +229,26 @@ export default {
 
   },
 
+  watch: {
+    '$route' (to, from) {
+
+      if(to.path === '/'){
+       this.fitTitles()
+       var vm = this
+
+       window.setTimeout(function() {
+         vm.fitTitles()
+         window.setTimeout(function() {
+           vm.fitTitles()
+           window.setTimeout(function() {
+             vm.fitTitles()
+           }, 500)
+         }, 500)
+       }, 500)
+
+      }
+    }
+  },
   created: function() {
 
 
@@ -189,7 +277,6 @@ export default {
         border-left: $mainBorderStyle;
         padding-left: $mainPadding;
         padding-right: $mainPadding;
-
         &:hover {
             color: $mainBackground;
             background: $mainBackgroundBlack;
@@ -200,7 +287,6 @@ export default {
         // width: 20%;
         padding-left: $mainPadding;
         padding-right: $mainPadding;
-
         &:hover {
             color: $mainBackground;
             background: $mainBackgroundBlack;
@@ -253,22 +339,19 @@ export default {
     &:first-child h1 {
         border-top: 0;
     }
+    &:first-child {
+        .singleRealTitle {
+            &:hover {
+                border-top: 1px solid $mainBackground;
+            }
+        }
 
-    &:first-child{
-      .singleRealTitle {
+        .singleRealName {
+            &:hover {
+                border-top: 1px solid $mainBackground;
+            }
 
-          &:hover {
-            border-top: 1px solid $mainBackgroundPink;
-          }
-      }
-
-      .singleRealName {
-
-          &:hover {
-            border-top: 1px solid $mainBackgroundPink;
-          }
-
-      }
+        }
     }
 
 }
@@ -283,7 +366,7 @@ export default {
     transition: max-height 0.5s, border 0.5s;
     position: relative;
     &.expanded {
-        max-height: 1000px;
+        max-height: 2000px;
         border-top: $mainBorderStyle;
         -webkit-transition: max-height 0.8s, border 0.8s;
         -moz-transition: max-height 0.8s, border 0.8s;
@@ -301,6 +384,11 @@ export default {
         width: 50%;
         line-height: $mainHeaderHeight;
         border-top: $mainBorderStyle;
+
+        -webkit-box-shadow: 1px 0 0 0 $mainBackgroundBlack;
+        -moz-box-shadow: 1px 0 0 0 $mainBackgroundBlack;
+        box-shadow: 1px 0 0 0 $mainBackgroundBlack;
+
         color: $mainBackgroundBlack;
         font-size: $secFontSize;
         text-align: center;
@@ -322,8 +410,11 @@ export default {
         // padding: $mainPadding;
         position: relative;
         .singleContentInnerRenderedWrapper {
+            -webkit-box-shadow: 1px 0 0 0 $mainBackgroundBlack;
+            -moz-box-shadow: 1px 0 0 0 $mainBackgroundBlack;
+            box-shadow: 1px 0 0 0 $mainBackgroundBlack;
             padding: $mainPadding;
-            background: $mainBackgroundPink;
+            // background: $mainBackground;
             // width: calc(50% + #{$mainHeaderHeight/2});
             z-index: 9;
             width: 50%;
@@ -359,9 +450,15 @@ export default {
             // display: flex;
             // align-items: center;
             // justify-content: center;
+            // position: absolute;
+
+            // display: flex;
+            // align-items: center;
+            // justify-content: center;
             width: 50%;
             // position: absolute;
             // height: 100%;
+            position: relative;
             float: right;
             right: 0;
             border-left: $mainBorderStyle;
@@ -375,6 +472,30 @@ export default {
                 display: block;
                 margin: 0;
             }
+
+            img[lazy=loading] {
+                /*your style here*/
+                // background: $mainBackgroundBlack;
+
+            }
+
+            .loadingText {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                -webkit-animation: fadeIn 0.8s infinite alternate;
+                animation: fadeIn 0.8s infinite alternate;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+            }
+
         }
 
     }

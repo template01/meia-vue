@@ -5,8 +5,6 @@ import App from './App'
 
 
 
-
-
 import swiper from '../node_modules/swiper/dist/js/swiper.min.js'
 import singlePost from './components/singlePost'
 import singlePostYear from './components/singlePostYear'
@@ -20,6 +18,23 @@ Vue.use(vueSmoothScroll);
 
 Vue.use(vueResource)
 Vue.use(VueRouter)
+
+import VueLazyload from 'vue-lazyload'
+
+// Vue.use(VueLazyload)
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  // error: 'dist/error.png',
+  // loading: 'dist/loading.gif',
+  // error:'https://d13yacurqjgara.cloudfront.net/users/82092/screenshots/1073359/spinner.gif',
+  // loading:'https://d13yacurqjgara.cloudfront.net/users/82092/screenshots/1073359/spinner.gif',
+  attempt: 1,
+  // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
+  listenEvents: [ 'scroll' ]
+})
+
+
 
 const router = new VueRouter({
   mode: 'history',
