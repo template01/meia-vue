@@ -11,9 +11,9 @@
     <div v-bind:style="{color:year.acf.yearcolor}" class="yearSingle" v-bind:class="{ slideOut: collapsed[index] }" v-for="(year, index) in gradyears">
       <div v-bind:style="{'border-color':year.acf.yearcolor}" class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
-        <span v-on:click="clickPrev(index)" class="left">← Past Year</span>
-        <span class="uppercase">Graduation {{year.name}}</span>
-        <span v-on:click="clickNext(index)" class="right">Next Year →</span>
+        <span v-on:click="clickPrev(index)" class="left">← Past</span>
+        <span class="uppercase">Year<br class="tabletView" /> {{year.name}}</span>
+        <span v-on:click="clickNext(index)" class="right">Future →</span>
       </div>
 
 
@@ -114,6 +114,16 @@ export default {
 
     },
 
+
+
+
+    // _.throttle(() => {
+    //   console.log('I get fired every two seconds!')
+    // }, 2000)
+
+  },
+  mounted: function() {
+
   }
 }
 </script>
@@ -136,8 +146,15 @@ export default {
 
         width: 33.33333%;
         font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
         padding: $mainPadding/1.8 $mainPadding $mainPadding;
         // top: $secFontBaseLineShift;
+
+        // @include media("<tablet") {
+        //     font-size: $secFontSizeTablet;
+        // }
     }
 }
 
@@ -178,11 +195,17 @@ export default {
         background: $mainBackgroundBlack;
         border-bottom: 1px solid $mainBackground;
         font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+            // color: red;
+        }
+
         height: $mainHeaderHeight;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+
         // cursor: pointer;
         .left {
             text-align: left;
@@ -237,8 +260,12 @@ export default {
 span {
     width: 33.33333%;
     text-align: center;
-    font-size: $secFontSize;
+    // font-size: $secFontSize;
     top: $secFontBaseLineShift;
+    @include media("<tablet") {
+        top: $secFontBaseLineShiftTablet;
+    }
+
     position: relative;
 }
 </style>

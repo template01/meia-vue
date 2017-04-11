@@ -23,7 +23,7 @@
         <!-- <p class="loadingText" >loading</p> -->
         <div v-show="!postJsonContentFeaturedImageLoaded" v-if="postJsonContentFeaturedImage" class="loadingText">
           <span>
-            Loading
+            LOADING
           </span>
         </div>
 
@@ -49,6 +49,7 @@
 
 <script>
 import fitText from '../assets/fittext.js'
+import _ from 'lodash'
 
 import alertTest from '../assets/alert.js'
 
@@ -95,9 +96,11 @@ export default {
 
     fitReadmore: function() {
       var vm = this
-      setTimeout(function() {
-        vm.linkLineHeight = vm.$el.querySelector('.singleContent').clientHeight - vm.$el.querySelector('.singleContentInnerRenderedWrapper').clientHeight - 1
-      }, 1000)
+      if(window.innerWidth>800){
+        setTimeout(function() {
+          vm.linkLineHeight = vm.$el.querySelector('.singleContent').clientHeight - vm.$el.querySelector('.singleContentInnerRenderedWrapper').clientHeight - 1
+        }, 1000)
+      }
     },
 
     collapseSingle: function() {
@@ -159,30 +162,34 @@ export default {
       var vm = this
       setTimeout(function() {
         if (vm.title.length <= 14) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 16);
+          window.fitText(document.getElementById(vm.id), vm.title.length / 20);
 
         }
 
         if (vm.title.length > 14 && vm.title.length <= 24) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 14);
+          window.fitText(document.getElementById(vm.id), vm.title.length / 8);
 
         }
         if (vm.title.length > 24 && vm.title.length <= 40) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 12);
+          window.fitText(document.getElementById(vm.id), vm.title.length / 6);
 
         }
         if (vm.title.length > 40 && vm.title.length <= 60) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 10);
+          window.fitText(document.getElementById(vm.id), vm.title.length / 4);
 
         }
 
         if (vm.title.length > 60) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 8);
+          window.fitText(document.getElementById(vm.id), vm.title.length / 2);
 
         }
 
       }, 1)
-    }
+    },
+
+    handleResize: _.throttle(function() {
+      this.fitTitles()
+    }, 0)
 
   },
   computed: {
@@ -225,7 +232,10 @@ export default {
       }, 500)
     }, 500)
 
-
+    var vm = this
+    window.addEventListener('resize', function() {
+      vm.handleResize()
+    });
 
   },
 
@@ -297,6 +307,10 @@ export default {
     h1 {
         margin: 0;
         border-top: $mainBorderStyle;
+        font-size: 32px;
+        @include media("<tablet") {
+          font-size: 12px;
+        }
         // width: 100%;
         font-family: $mainFont;
         font-weight: $mainFontHeavy;
@@ -307,6 +321,10 @@ export default {
         height: 130px;
         line-height: 130px;
 
+        @include media("<tablet") {
+          height: 70px;
+          line-height: 70px;
+        }
         span {
             padding: 100px $mainPadding;
             &:nth-child(2) {
@@ -321,6 +339,20 @@ export default {
             &.large {
                 font-size: 7vw;
             }
+
+
+            @include media("<tablet") {
+              &.small {
+                  font-size: 1.5vw;
+              }
+              &.mid {
+                  font-size: 2.5vw;
+              }
+              &.large {
+                  font-size: 3.5vw;
+              }
+            }
+
         }
     }
     &:last-child {
@@ -359,7 +391,7 @@ export default {
 .singleContent {
     max-height: 0;
     overflow: hidden;
-    border-top: 0 solid black;
+    border-top: 0 solid $mainBackgroundBlack;
     width: 100%;
     -webkit-transition: max-height 0.5s, border 0.5s;
     -moz-transition: max-height 0.5s, border 0.5s;
@@ -382,6 +414,10 @@ export default {
         position: absolute;
         height: 100%;
         width: 50%;
+        @include media("<tablet") {
+          width: 100%;
+        }
+
         line-height: $mainHeaderHeight;
         border-top: $mainBorderStyle;
 
@@ -391,6 +427,11 @@ export default {
 
         color: $mainBackgroundBlack;
         font-size: $secFontSize;
+
+        @include media("<tablet") {
+          font-size: $secFontSizeTablet;
+        }
+
         text-align: center;
         text-decoration: none;
         bottom: 0;
@@ -418,6 +459,10 @@ export default {
             // width: calc(50% + #{$mainHeaderHeight/2});
             z-index: 9;
             width: 50%;
+            @include media("<tablet") {
+              width: 100%;
+              margin-bottom: 40px;
+            }
             // float: left;
             // display: inline-block;
             p {
@@ -432,6 +477,14 @@ export default {
             align-items: center;
             justify-content: center;
             width: 50%;
+            @include media("<tablet") {
+              width: 100%;
+              height: 40px;
+              margin-bottom:-40px;
+              bottom: 0;
+              border-left: 0;
+              border-top: 1px solid $mainBackgroundBlack;
+            }
             position: absolute;
             height: 100%;
             right: 0;
@@ -439,6 +492,11 @@ export default {
             text-decoration: none;
             color: $mainBackgroundBlack;
             font-size: $secFontSize;
+            @include media("<tablet") {
+              font-size: $secFontSizeTablet;
+            }
+
+
             &:hover {
                 color: $mainBackground;
                 background: $mainBackgroundBlack;
@@ -456,6 +514,11 @@ export default {
             // align-items: center;
             // justify-content: center;
             width: 50%;
+            @include media("<tablet") {
+              width: 100%;
+              border-left: 0;
+
+            }
             // position: absolute;
             // height: 100%;
             position: relative;
@@ -465,6 +528,9 @@ export default {
             text-decoration: none;
             color: $mainBackgroundBlack;
             font-size: $thirdFontSize;
+            @include media("<tablet") {
+              font-size: $thirdFontSizeTablet;
+            }
 
             img {
                 width: calc(100% - #{$mainPadding*0});
@@ -487,8 +553,13 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                -webkit-animation: fadeIn 0.8s infinite alternate;
-                animation: fadeIn 0.8s infinite alternate;
+                font-size: $secFontSize;
+                @include media("<tablet") {
+                  font-size: $secFontSizeTablet;
+                }
+
+                // -webkit-animation: fadeIn 0.8s infinite alternate;
+                // animation: fadeIn 0.1s infinite alternate;
             }
             @keyframes fadeIn {
                 from {
@@ -511,6 +582,10 @@ export default {
     p {
         margin: 0;
         font-size: $thirdFontSize;
+        @include media("<tablet") {
+          font-size: $thirdFontSizeTablet;
+        }
+
     }
     // padding-left: $mainHeaderHeight*4;
     // padding-right: $mainHeaderHeight*4;

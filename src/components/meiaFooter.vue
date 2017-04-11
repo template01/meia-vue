@@ -10,7 +10,7 @@
       <p v-html="colophon"></p>
     </div>
 
-</div>
+  </div>
 </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
   // }
   data() {
     return {
-      about:'',
-      colophon:''
+      about: '',
+      colophon: ''
     }
   },
 
@@ -36,9 +36,9 @@ export default {
         // this.postJsonTitle = response.body[0].title.rendered
         this.about = response.body[0].acf.about
         this.colophon = response.body[0].acf.colophon
-          // if(this.postJsonContent.length === 0){
-          // this.postJsonContent = response.body.content.rendered
-          // this.postJsonTitle = response.body.title.rendered
+        // if(this.postJsonContent.length === 0){
+        // this.postJsonContent = response.body.content.rendered
+        // this.postJsonTitle = response.body.title.rendered
 
         // }
       })
@@ -60,30 +60,42 @@ export default {
         margin: 0;
         color: $mainBackgroundBlack;
         font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
     }
 
+    .footerContentWrapper {
 
-        .footerContentWrapper {
+        width: 100%;
+        clear: both;
+        display: inline-block;
 
-            width: 100%;
-            clear: both;
-            display: inline-block;
+        .left {
+            @include media("<tablet") {
+              width: 100%;
+              padding-bottom: 0;
 
-            .left {
-                width: 50%;
-                float: left;
-                padding: $mainPadding;
-                // padding-top: $mainPadding*2;
-                // border-right: $mainBorderStyle;
             }
-            .right {
-              padding: $mainPadding;
-              // padding-top: $mainPadding*2;
-                width: 50%;
-                float: right;
-            }
-
+            width: 50%;
+            float: left;
+            padding: $mainPadding;
+            // padding-top: $mainPadding*2;
+            // border-right: $mainBorderStyle;
         }
+        .right {
+            @include media("<tablet") {
+              width: 100%;
+              padding-top: 0;
+
+            }
+            padding: $mainPadding;
+            // padding-top: $mainPadding*2;
+            width: 50%;
+            float: right;
+        }
+
+    }
 
 }
 </style>

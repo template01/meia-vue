@@ -1,7 +1,7 @@
 <template>
 <div id="meiaHeader">
-  <h1 class="headerElement">Piet Zwart Insititute</h1>
-  <h1 class="headerElement alignCenter"><router-link to="/">MASTER EDUCATION IN ARTS</router-link></h1>
+  <h1 id="pzi" class="headerElement"></h1>
+  <h1 id="meia" class="headerElement alignCenter"><router-link to="/"></router-link></h1>
   <span class="headerElement alignRight">
     <!-- <button v-on:click="emitToggleNews()">NEWS</button> -->
     <button v-on:click="goToBottom()">ABOUT</button>
@@ -28,7 +28,7 @@ export default {
       // console.log(window.scroll)
       // console.log(window.scroll())
       // this.$SmoothScroll(target,duration,callback,context);
-      this.$SmoothScroll(document.getElementById('footer').offsetTop-40, 500);
+      this.$SmoothScroll(document.getElementById('footer').offsetTop - 40, 500);
       // window.scrollTo({ top: 1000, left: 0, behavior: 'smooth' });
     }
   }
@@ -37,14 +37,15 @@ export default {
 
 
 <style lang="scss">@import "../scss/globalVars.scss";
-
-#meiaHeader + *{
-  margin-top: $mainHeaderHeight;
+@import "../../node_modules/include-media/dist/_include-media.scss";
+#meiaHeader + * {
+    margin-top: $mainHeaderHeight;
 }
-
 </style>
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
+@include media(">phone","<tablet") {
+  }
 
 #meiaHeader {
 
@@ -52,7 +53,6 @@ export default {
     top: 0;
     width: 100%;
     z-index: 999;
-
 
     color: $mainBackgroundBlack;
 
@@ -62,25 +62,59 @@ export default {
     justify-content: center;
     height: $mainHeaderHeight;
     .headerElement {
-      color: $mainBackgroundBlack;
-      text-transform: uppercase;
-      font-weight: normal;
+        color: $mainBackgroundBlack;
+        text-transform: uppercase;
+        font-weight: normal;
 
         width: 33.33333%;
         font-size: $secFontSize;
         padding: $mainPadding;
         top: $secFontBaseLineShift;
         position: relative;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
+
+    }
+
+    #pzi {
+        &:after {
+            content: "Piet Zwart Insititute";
+        }
+        @include media("<tablet") {
+            &:after {
+                content: "PZI";
+            }
+        }
+    }
+
+
+    #meia {
+        &:after {
+            content: "MASTER EDUCATION IN ARTS";
+        }
+        @include media("<tablet") {
+            &:after {
+                content: "MEIA";
+            }
+        }
     }
 
     button {
         font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
         background: none;
         border: none;
         margin: 0;
         padding: 0;
         color: $mainBackgroundBlack;
 
+        &:hover{
+          border-bottom: 1px solid $mainBackgroundBlack;
+        }
+        
         &:first-of-type {
             // padding-right: $mainPadding;
         }

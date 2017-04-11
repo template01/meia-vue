@@ -1,34 +1,47 @@
 <template>
-
-
 <div class="singlePost">
 
   <div v-if="!singleLoaded" class="singleLoaded">
 
-      <h1 class="headerElement">Loading</h1>
+    <h1 class="headerElement">Loading</h1>
 
   </div>
 
   <div class="signlePostHeader" v-bind:style="{background:yearColor}">
-    <h1 class="headerElement" v-text="postJsonStudent"></h1>
-    <h1 class="headerElement alignCenter">Graduation {{year}}</h1>
-    <h1 class="headerElement alignRight" v-text="">Index</h1>
+    <!-- <h1 class="headerElement" v-text="postJsonStudent"></h1> -->
+    <span class="headerElement">Work</span>
+    <span class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
+    <span class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span>
+
 
   </div>
   <div class="postcontentWrapper" v-bind:style="{background:yearColor}">
     <div class="left" v-bind:style="{background:yearColor}">
-      <p class="postcontentWrapperTitle">{{postJsonTitle}}</p>
-      <div v-html="postJsonContentMedia"></div>
+      <p class="postcontentWrapperTitle"><span v-html="postJsonStudent"></span><br /><span v-html="postJsonTitle"></span></p>
+      <div class="notTabletView" v-html="postJsonContentMedia"></div>
     </div>
     <div class="right" v-bind:style="{background:yearColor}">
       <div v-html="postJsonContent">
       </div>
-      <div class="attachedFiled">
-        <li v-for="file in postJsonAttachedField">
-
-          <a v-bind:href="file.attachments.url">{{file.attachments.title}}</a>
-        </li>
+      <div v-if="postJsonAttachedField" class="attachments">
+        <p class="title">
+          Attachments:
+        </p>
+        <ul>
+          <li v-for="file in postJsonAttachedField">
+            <span class="attachmentInner">
+            <span v-html="file.prettytitle"></span>
+            <span>
+              <a v-bind:href="file.attachments.url">Download</a>
+            </span>
+            <span class="description" v-html="file.description"></span>
+            </span>
+          </li>
+        </ul>
       </div>
+
+      <div class="tabletView paddedTop" v-html="postJsonContentMedia"></div>
+
     </div>
   </div>
 </div>
@@ -53,10 +66,10 @@ export default {
             this.year = response.body.name
             this.yearColor = response.body.acf.yearcolor
             var vm = this
-            setTimeout(function(){
+            setTimeout(function() {
               vm.singleLoaded = true;
               // vm.indexLoaded = true
-            },500)
+            }, 500)
           })
         }
       })
@@ -76,8 +89,8 @@ export default {
       postJsonContentMedia: '',
       postJsonAttachedField: [],
       year: '',
-      yearColor:'',
-      singleLoaded:false
+      yearColor: '',
+      singleLoaded: false
       // postJsonYear: '',
     }
   },
@@ -88,32 +101,41 @@ export default {
 
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
-.singleLoaded{
-  background-color: $mainBackgroundBlack;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  z-index:99999999999;
-  display: flex;
-  .headerElement {
-    margin: 0;
-    color: $mainBackground;
-    text-transform: uppercase;
-    font-weight: normal;
+.singleLoaded {
+    background-color: $mainBackgroundBlack;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 99999999999;
+    display: flex;
+    .headerElement {
+        margin: 0;
+        color: $mainBackground;
+        text-transform: uppercase;
+        font-weight: normal;
 
-      width: 33.33333%;
-      font-size: $secFontSize;
-      padding: $mainPadding;
-      padding-top: $mainPadding/1.8;
-      // top: $secFontBaseLineShift;
-  }
+        width: 33.33333%;
+        font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
+
+        padding: $mainPadding/1.8 $mainPadding $mainPadding;
+        // top: $secFontBaseLineShift;
+    }
 }
-
 
 .singlePost {
     .signlePostHeader {
         // background: red;
 
+        a {
+            text-decoration: none;
+            color: inherit;
+            &:hover {
+                border-bottom: 1px solid $mainBackgroundBlack;
+            }
+        }
         position: fixed;
         width: 100%;
         z-index: 999;
@@ -136,6 +158,10 @@ export default {
             margin: 0;
             width: 33.33333%;
             font-size: $secFontSize;
+            @include media("<tablet") {
+                font-size: $secFontSizeTablet;
+                top: $secFontBaseLineShiftTablet;
+            }
             padding: $mainPadding;
             top: $secFontBaseLineShift;
             position: relative;
@@ -155,12 +181,20 @@ export default {
     }
 
     .postcontentWrapper {
+
+        .paddedTop {
+            padding-top: $mainPadding;
+        }
         img {
             max-width: 10px;
         }
         width: 100%;
         clear: both;
-
+        @include media("<tablet") {
+            display: block;
+            overflow-x: hidden;
+            padding-bottom: 0;
+        }
         display: box;
         display: -moz-box;
         -moz-box-orient: horizontal;
@@ -168,9 +202,66 @@ export default {
         -webkit-box-orient: horizontal;
         box-orient: horizontal;
         padding-bottom: $mainPadding*2;
+        padding-top: $mainPadding;
+
+        .attachments {
+            margin-top: $mainPadding;
+            border-top: $mainBorderStyle;
+            @include media("<tablet") {
+                border-bottom: $mainBorderStyle;
+                // margin-bottom: $mainPadding;
+
+            }
+            .title {
+                text-transform: uppercase;
+                font-weight: normal;
+                margin-top: $mainPadding;
+                margin-bottom: $mainPadding;
+                font-size: $secFontSize;
+                @include media("<tablet") {
+                    font-size: $secFontSizeTablet;
+
+                }
+            }
+
+            .attachmentInner {}
+
+            a {
+                text-decoration: none;
+                color: inherit;
+                border-bottom: 1px solid $mainBackgroundBlack;
+            }
+
+            ul {
+                padding-left: $mainPadding*2;
+                list-style-type: circle;
+            }
+
+            li {
+                margin-top: 0;
+                font-size: $thirdFontSize;
+                @include media("<tablet") {
+                    font-size: $thirdFontSizeTablet;
+                }
+                text-indent: 0;
+                padding-left: 0;
+                margin-bottom: $mainPadding;
+            }
+
+            .description {
+                margin-top: $mainPadding/2;
+                display: block;
+            }
+        }
 
         .left {
             width: 50%;
+            @include media("<tablet") {
+                width: 100%;
+                border-right: 0;
+
+            }
+
             -moz-box-flex: 1.0;
             -webkit-box-flex: 1.0;
             -ms-flex: 1.0;
@@ -180,6 +271,11 @@ export default {
 
             .postcontentWrapperTitle {
                 font-size: $thirdFontSize;
+                @include media("<tablet") {
+                    font-size: $thirdFontSizeTablet;
+                    margin-bottom: 0;
+                    margin-top: $mainPadding;
+                }
                 text-transform: uppercase;
                 margin-bottom: $mainPadding*2;
             }
@@ -187,6 +283,10 @@ export default {
         .right {
             padding: $mainPadding*2 $mainPadding $mainPadding;
             width: 50%;
+            @include media("<tablet") {
+                width: 100%;
+                padding-top: 0;
+            }
             -moz-box-flex: 1.0;
             -webkit-box-flex: 1.0;
             -ms-flex: 1.0;
@@ -208,10 +308,16 @@ export default {
             p:first-of-type {
                 margin-top: 0;
             }
+            p:last-of-type {
+                margin-bottom: 0;
+            }
         }
         .right {
             p:first-of-type {
                 margin-top: 0;
+            }
+            p:last-of-type {
+                margin-bottom: 0;
             }
         }
         img {
@@ -220,10 +326,16 @@ export default {
             margin: 0 auto;
             display: block;
             padding-bottom: $mainPadding;
+            &:last-of-type {
+                padding-bottom: 0;
+            }
         }
 
         p {
             font-size: $thirdFontSize;
+            @include media("<tablet") {
+                font-size: $thirdFontSizeTablet;
+            }
         }
 
     }

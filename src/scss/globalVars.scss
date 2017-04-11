@@ -1,5 +1,9 @@
 @import "../fonts/arial.css";
 
+@import "../../node_modules/include-media/dist/_include-media.scss";
+
+$breakpoints: (phone: 640px, tablet: 800px, desktop: 1024px);
+
 $mainFont: Arial;
 
 $mainFontHeavy:900;
@@ -9,8 +13,19 @@ $secFontSize: 18px;
 $thirdFontSize: 22px;
 
 
+
+$mainFontSizeTablet: 24px;
+$secFontSizeTablet: 14px;
+$thirdFontSizeTablet: 18px;
+
+
+$mainFontSizeMobile: 30px;
+$secFontSizeMobile: 18px;
+$thirdFontSizeMobile: 22px;
+
 // requires position relative
 $secFontBaseLineShift: $secFontSize/8;
+$secFontBaseLineShiftTablet: $secFontSizeTablet/12;
 
 $mainBackground: ghostwhite;
 
@@ -43,4 +58,32 @@ $mainBorderStyle: 1px solid $mainBackgroundBlack;
 
 body,html{
   background: $mainBackground;
+}
+
+
+
+@include media("<tablet") {
+    .tabletView {
+        display: inherit;
+    }
+
+    .notTabletView{
+      display: none;
+    }
+
+
+}
+
+@include media(">tablet") {
+
+  .tabletView {
+      display: none;
+  }
+
+  .notTabletView{
+    display: inherit;
+  }
+
+
+
 }

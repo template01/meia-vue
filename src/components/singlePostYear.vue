@@ -11,20 +11,21 @@
 <div class="singlePostYear">
 
 
-    <div v-if="!singleLoaded" class="singleLoaded">
+  <div v-if="!singleLoaded" class="singleLoaded">
 
-        <h1 class="headerElement">Loading</h1>
+    <h1 class="headerElement">Loading</h1>
 
-    </div>
+  </div>
 
 
   <div v-bind:style="{'border-color':yearColor}" class="signlePostHeader">
-    <h1 v-bind:style="{color:yearColor}" class="headerElement">Graduation description</h1>
-    <h1 v-bind:style="{color:yearColor}" class="headerElement alignCenter">Graduation {{year}}</h1>
-    <h1 v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text="">Index</h1>
+    <span id="description" v-bind:style="{color:yearColor}" class="headerElement"></span>
+    <span id="year" v-bind:style="{color:yearColor}" class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
+    <span v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span>
+
   </div>
-  <div   class="postcontentWrapper">
-    <div  class="postcontentWrapperTitle">
+  <div class="postcontentWrapper">
+    <div class="postcontentWrapperTitle">
       <p v-bind:style="{color:yearColor}">{{postJsonTitle}}</p>
 
     </div>
@@ -58,7 +59,7 @@ export default {
     getContent: function(yearCategory) {
 
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?search=' + yearCategory).then(function(response) {
-        this.$http.get(response.body[0]._links['wp:post_type'][1].href ).then(function(response) {
+        this.$http.get(response.body[0]._links['wp:post_type'][1].href).then(function(response) {
           this.postJsonContent = response.body[0].acf.text_field
           this.postJsonTitle = response.body[0].title.rendered
           this.splashExcerpt = response.body[0].acf.excerpt
@@ -71,10 +72,10 @@ export default {
             this.yearColor = response.body.acf.yearcolor
 
             var vm = this
-            setTimeout(function(){
+            setTimeout(function() {
               vm.singleLoaded = true;
               // vm.indexLoaded = true
-            },500)
+            }, 500)
 
           })
 
@@ -99,8 +100,8 @@ export default {
       postJsonContentMedia: '',
       year: '',
       splashExcerpt: '',
-      yearColor:'',
-      singleLoaded:false
+      yearColor: '',
+      singleLoaded: false
 
     }
   },
@@ -110,31 +111,42 @@ export default {
 
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
+.singleLoaded {
+    background-color: $mainBackgroundBlack;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 99999999999;
+    display: flex;
+    .headerElement {
+        margin: 0;
+        color: $mainBackground;
+        text-transform: uppercase;
+        font-weight: normal;
 
-.singleLoaded{
-  background-color: $mainBackgroundBlack;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  z-index:99999999999;
-  display: flex;
-  .headerElement {
-    margin: 0;
-    color: $mainBackground;
-    text-transform: uppercase;
-    font-weight: normal;
+        width: 33.33333%;
+        font-size: $secFontSize;
+        @include media("<tablet") {
+            font-size: $secFontSizeTablet;
+        }
 
-      width: 33.33333%;
-      font-size: $secFontSize;
-      padding: $mainPadding;
-      padding-top: $mainPadding/1.8;
-      // top: $secFontBaseLineShift;
-  }
+        padding: $mainPadding/1.8 $mainPadding $mainPadding;
+        // top: $secFontBaseLineShift;
+    }
 }
 
 .singlePostYear {
     .signlePostHeader {
         // background: red;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            &:hover {
+                border-bottom: 1px solid;
+                border-color: inherit;
+            }
+        }
 
         position: fixed;
         width: 100%;
@@ -162,10 +174,36 @@ export default {
             margin: 0;
             width: 33.33333%;
             font-size: $secFontSize;
+            @include media("<tablet") {
+                font-size: $secFontSizeTablet;
+                top: $secFontBaseLineShiftTablet;
+            }
             padding: $mainPadding;
             top: $secFontBaseLineShift;
             position: relative;
         }
+
+        #description {
+            &:after {
+                content: "Graduation description";
+            }
+            @include media("<tablet") {
+                &:after {
+                    content: "Outline";
+                }
+            }
+        }
+
+        // #year {
+        //     &:after {
+        //         content: "Graduation";
+        //     }
+        //     @include media("<tablet") {
+        //         &:before {
+        //             content: "Year";
+        //         }
+        //     }
+        // }
 
         .alignCenter {
             text-align: center;
@@ -187,7 +225,9 @@ export default {
         width: 100%;
         clear: both;
         display: inline-block;
-
+        @include media("<tablet") {
+            overflow-x: hidden;
+        }
         .postcontentWrapperTitle {
             background: $mainBackgroundBlack;
             padding: $mainPadding;
@@ -196,8 +236,14 @@ export default {
                 margin: 0;
                 line-height: 90px;
                 font-weight: 900;
+                @include media("<tablet") {
+                    font-size: 32px;
+                    line-height: 32px;
+                    margin-bottom: 0;
+
+                }
+
                 color: $mainBackground;
-                margin-bottom: $mainPadding;
 
             }
 
@@ -211,7 +257,9 @@ export default {
             display: -webkit-box;
             -webkit-box-orient: horizontal;
             box-orient: horizontal;
-
+            @include media("<tablet") {
+                display: block;
+            }
             .splashExcerpt {
                 padding-bottom: $mainPadding;
                 margin-bottom: 0;
@@ -219,20 +267,29 @@ export default {
 
             .left {
                 width: 50%;
+                @include media("<tablet") {
+                    width: 100%;
+                    padding-top: 0;
+                }
                 -moz-box-flex: 1.0;
                 -webkit-box-flex: 1.0;
                 -ms-flex: 1.0;
                 box-flex: 1.0;
-                padding: $mainPadding*2 $mainPadding $mainPadding;
+                padding: $mainPadding;
                 border-right: $mainBorderStyle;
                 background: $mainBackgroundBlack;
                 color: $mainBackground;
 
             }
             .right {
-              background: $mainBackground;
-                padding: $mainPadding*2 $mainPadding $mainPadding;
+                background: $mainBackground;
+                padding: $mainPadding;
                 width: 50%;
+                @include media("<tablet") {
+                    width: 100%;
+                    padding-top: $mainPadding;
+
+                }
                 -moz-box-flex: 1.0;
                 -webkit-box-flex: 1.0;
                 -ms-flex: 1.0;
@@ -248,20 +305,25 @@ export default {
 
 <style lang="scss">@import "../scss/globalVars.scss";
 .singlePostYear {
-    .postcontentWrapper {
-      color: $mainBackgroundBlack;
 
+    .postcontentWrapper {
+        color: $mainBackgroundBlack;
 
         .left {
             p:first-of-type {
                 margin-top: 0;
+            }
+            p:last-of-type {
+                margin-bottom: 0;
             }
         }
         .right {
             p:first-of-type {
                 margin-top: 0;
             }
-
+            p:last-of-type {
+                margin-bottom: 0;
+            }
         }
         img {
             max-width: 100%;
@@ -269,10 +331,16 @@ export default {
             margin: 0 auto;
             display: block;
             padding-bottom: $mainPadding;
+            &:last-of-type {
+                padding-bottom: 0;
+            }
         }
 
         p {
             font-size: $thirdFontSize;
+            @include media("<tablet") {
+                font-size: $thirdFontSizeTablet;
+            }
         }
 
     }

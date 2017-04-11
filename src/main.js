@@ -13,6 +13,11 @@ import Indexpage from './components/Indexpage'
 import Getgradyears from './components/Getgradyears'
 
 
+// import _ from 'lodash'
+// window._ = require('lodash');
+// Vue.use(lodash)
+
+
 var vueSmoothScroll = require('vue-smoothscroll');
 Vue.use(vueSmoothScroll);
 

@@ -28,14 +28,25 @@
 
     var settings = extend({
       'minFontSize' : 32,
-      'maxFontSize' : 90
+      'maxFontSize' : 80
+    },options);
+
+
+    var settingsMobile = extend({
+      'minFontSize' : 12,
+      'maxFontSize' : 32
     },options);
 
     var fit = function (el) {
       var compressor = kompressor || 1;
 
       var resizer = function () {
-        el.style.fontSize = Math.max(Math.min(el.clientWidth / (compressor*10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
+        if(window.innerWidth>800){
+          el.style.fontSize = Math.max(Math.min(el.clientWidth / (compressor*10), parseFloat(settings.maxFontSize)), parseFloat(settings.minFontSize)) + 'px';
+        }else{
+          el.style.fontSize = Math.max(Math.min(el.clientWidth / (compressor*10), parseFloat(settingsMobile.maxFontSize)), parseFloat(settingsMobile.minFontSize)) + 'px';
+
+        }
       };
 
       // Call once to set.

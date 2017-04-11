@@ -93,17 +93,24 @@ export default {
 
     .titleWrap {
         padding: $mainPadding;
-
+        @include media("<tablet") {
+          padding-bottom: 0;
+        }
         h1 {
             // padding-top: $mainPadding;
-            padding-bottom: $mainPadding;
+            // padding-bottom: $mainPadding;
             // word-break: break-all;
             // color: $mainBackground;
 
             // color: red;
-            font-size: 90px;
+            font-size: 80px;
             font-weight: 900;
-            line-height: 90px;
+            line-height: 80px;
+
+            @include media("<tablet") {
+              font-size: 32px;
+              line-height: 32px;
+            }
             margin: 0;
             // width: 50%;
             // float: right;
@@ -116,6 +123,10 @@ export default {
 
             margin: 0;
             font-size: $secFontSize;
+
+            @include media("<tablet") {
+              font-size: $secFontSizeTablet;
+            }
             // width: 50%;
             float: left;
         }
@@ -126,6 +137,9 @@ export default {
         width: 100%;
         clear: both;
         font-size: $secFontSize;
+        @include media("<tablet") {
+          font-size: $secFontSizeTablet;
+        }
         border-top: 1px solid red;
         // border-top: 1px solid $mainBackground;
         height: $mainHeaderHeight;
@@ -190,10 +204,15 @@ export default {
 
     width: 50%;
     // margin-top: $mainPadding;
-
+    @include media("<tablet") {
+      width: 100%;
+      padding-top: 0;
+    }
     p {
         font-size: $thirdFontSize;
-
+        @include media("<tablet") {
+          font-size: $thirdFontSizeTablet;
+        }
         margin: 0;
     }
 }
