@@ -4,7 +4,7 @@
   <!-- <ListpostsImages v-bind:workids="this.workids" v-bind:worktitles="this.worktitles" v-bind:workstudents="this.workstudents" v-bind:featuredimages="this.featuredimages" v-bind:categoryyear="this.categoryyear" v-on:emittoggleHidePostList="toggleHidePostList()"></ListpostsImages> -->
   <!-- <div v-bind:style="{'max-height':postsListHeight+'px'}" v-show="this.hideSinglePosts"> -->
   <div class="listPostsWrapper" v-bind:class="{ collapsed: hidePostList }">
-    <singlepostindex v-bind:yearColor="yearColor" v-for="(project, index) in projects" v-bind:index="index" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
+    <singlepostindex v-bind:yearColor="yearColor" v-for="(project, index) in projects" v-bind:index="indexGradyears" v-bind:workstudent="workstudents[index]" v-bind:projectslength="projects.length" v-bind:id="project.id" v-bind:title="project.title.rendered"></singlepostindex>
   </div>
 </div>
 </template>
@@ -15,7 +15,7 @@ import Singlepostindex from './Singlepostindex'
 // import ListpostsImages from './ListpostsImages'
 
 export default {
-  props: ['categoryyear', 'categorylink', 'index', 'yearColor','parentId'],
+  props: ['categoryyear', 'categorylink', 'indexGradyears', 'yearColor','parentId'],
   components: {
     Listposts,
     Singlepostindex,
@@ -91,7 +91,7 @@ export default {
 
       var vm = this
 
-      console.log(this.$el.getAttribute('id'))
+      // console.log(this.$el.getAttribute('id'))
       document.head.insertAdjacentHTML('beforeend',
         `<style>
               #`+this.$el.getAttribute('id')+` .single:first-child .singleRealTitle:hover {

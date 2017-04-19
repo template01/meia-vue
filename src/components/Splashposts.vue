@@ -8,15 +8,51 @@
   <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
   </div>
   <div v-bind:style="{color:this.yearColor, 'border-color':this.yearColor}" class="navigationWrap">
-    <div v-bind:style="{'border-color':this.yearColor}" class="border-right" v-on:click="goToGraduates()">
+    <div v-bind:style="{'border-color':this.yearColor}" class="border-right singleContentInnerLinkOuter" v-on:click="goToGraduates()">
       <!-- <span>Graduates ↓</span> -->
       <span>Graduates</span>
     </div>
-    <router-link class="singleContentInnerLink" v-bind:to="'year/'+year">
-      <div>
-        <span><span>Read More</span></span>
-      </div>
-    </router-link>
+    <div class="singleContentInnerLinkOuter">
+      <template v-if="this.splashProgramme">
+        <div @click="expandedProgramme=!expandedProgramme" class="singleContentInnerLink border-right" v-bind:style="{'border-color':this.yearColor}">
+          <div>
+            <span><span>Programme</span></span>
+          </div>
+        </div>
+        <div class="singleContentInnerLink">
+          <!-- <router-link v-bind:to="'year/'+year">
+            <div>
+              <span><span>Read More</span></span>
+            </div>
+          </router-link> -->
+
+          <router-link class="" v-bind:to="{ path: 'year/'+year,         query: {
+                    yearview: yearviewIndex
+                  }}">
+                  <div>
+                    <span>Read More</span>
+                  </div>
+          </router-link>
+
+        </div>
+</template>
+      <template  v-else>
+<div class="">
+  <router-link class="" v-bind:to="{ path: 'year/'+year,         query: {
+            yearview: yearviewIndex
+          }}">
+          <div>
+            <span>Read More</span>
+          </div>
+  </router-link>
+
+</div>
+</template>
+    </div>
+
+  </div>
+  <div v-if="expandedProgramme" class="splashProgramme" v-bind:style="{'color':this.yearColor, 'border-color':this.yearColor}" v-html="splashProgramme">
+
   </div>
 
 </div>
@@ -24,7 +60,7 @@
 
 <script>
 export default {
-  props: ['categorylink', 'listpostId', 'yearColor','year'],
+  props: ['categorylink', 'listpostId', 'yearColor', 'year','yearviewIndex'],
   components: {
     // Listposts,
     // Splashposts
@@ -37,7 +73,9 @@ export default {
       hidePostList: false,
       yearTitle: '',
       splashExcerpt: '',
+      splashProgramme: '',
       showSplash: true,
+      expandedProgramme: false,
       // yearColor:''
     }
   },
@@ -49,6 +87,7 @@ export default {
       if (response.body.length > 0) {
         this.yearTitle = response.body[0].title.rendered
         this.splashExcerpt = response.body[0].acf.excerpt
+        this.splashProgramme = response.body[0].acf.programme
 
       }
 
@@ -64,10 +103,10 @@ export default {
 
     collapseSplash: function() {
       this.showSplash = !this.showSplash
-        // this.postJsonContent = ''
+      // this.postJsonContent = ''
     },
     goToGraduates: function() {
-      this.$SmoothScroll(document.getElementById(this.listpostId).offsetTop-79, 250);
+      this.$SmoothScroll(document.getElementById(this.listpostId).offsetTop - 79, 250);
     }
 
   },
@@ -80,8 +119,7 @@ export default {
 .splashPost {
     background: $mainBackgroundBlack;
     // color: $mainBackground;
-    color: red;
-
+    color: $mainBackgroundBlack;
 
     max-height: 0;
     overflow: hidden;
@@ -91,10 +129,25 @@ export default {
     -moz-transition: max-height 0.5s, border 0.5s;
     transition: max-height 0.5s, border 0.5s;
 
+    .splashProgramme {
+        padding: $mainPadding;
+        border-top: $mainBorderStyle;
+        color: $mainBackgroundBlack;
+        margin: 0;
+        p {
+            margin: 0;
+
+        }
+        font-size: $thirdFontSize;
+        @include media("<tablet") {
+            font-size: $thirdFontSizeTablet;
+        }
+    }
+
     .titleWrap {
         padding: $mainPadding;
         @include media("<tablet") {
-          padding-bottom: 0;
+            padding-bottom: 0;
         }
         h1 {
             // padding-top: $mainPadding;
@@ -106,10 +159,9 @@ export default {
             font-size: 80px;
             font-weight: 900;
             line-height: 80px;
-
             @include media("<tablet") {
-              font-size: 32px;
-              line-height: 32px;
+                font-size: 32px;
+                line-height: 32px;
             }
             margin: 0;
             // width: 50%;
@@ -123,9 +175,8 @@ export default {
 
             margin: 0;
             font-size: $secFontSize;
-
             @include media("<tablet") {
-              font-size: $secFontSizeTablet;
+                font-size: $secFontSizeTablet;
             }
             // width: 50%;
             float: left;
@@ -138,16 +189,15 @@ export default {
         clear: both;
         font-size: $secFontSize;
         @include media("<tablet") {
-          font-size: $secFontSizeTablet;
+            font-size: $secFontSizeTablet;
         }
-        border-top: 1px solid red;
+        border-top: 1px solid $mainBackgroundBlack;
         // border-top: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         line-height: $mainHeaderHeight;
         .border-right {
-          // border-right: 1px solid $mainBackground;
-          border-right: 1px solid red;
-
+            // border-right: 1px solid $mainBackground;
+            border-right: 1px solid $mainBackgroundBlack;
 
         }
 
@@ -156,25 +206,25 @@ export default {
             text-decoration: none;
         }
 
-        div {
-
-            // word-spacing: $mainPadding;
+        .singleContentInnerLinkOuter {
 
             text-align: center;
 
-            // -ms-box-orient: horizontal;
-            // display: -webkit-box;
-            // display: -moz-box;
-            // display: -ms-flexbox;
-            // display: -moz-inline-flex;
-            // display: -webkit-inline-flex;
-            // display: inline-flex;
-
             width: 50%;
             float: left;
+            @include media("<tablet") {
+                width: 100%;
+                &.border-right {
+                    border-right: 0 !important;
+                    border-bottom: $mainBorderStyle;
+                }
+            }
+        }
 
-            // -webkit-justify-content: space-around;
-            // justify-content: space-around;
+        .singleContentInnerLink {
+            text-align: center;
+            width: 50%;
+            float: left;
             span {
                 margin: 0;
                 text-align: center;
@@ -195,6 +245,15 @@ export default {
 
 
 <style lang="scss">@import "../scss/globalVars.scss";
+
+.splashProgramme {
+    p:first-of-type {
+        margin-top: 0;
+    }
+    p:last-of-type {
+        margin-bottom: 0;
+    }
+}
 .blurbWrap {
     padding: $mainPadding;
 
@@ -205,13 +264,13 @@ export default {
     width: 50%;
     // margin-top: $mainPadding;
     @include media("<tablet") {
-      width: 100%;
-      padding-top: 0;
+        width: 100%;
+        padding-top: 0;
     }
     p {
         font-size: $thirdFontSize;
         @include media("<tablet") {
-          font-size: $thirdFontSizeTablet;
+            font-size: $thirdFontSizeTablet;
         }
         margin: 0;
     }

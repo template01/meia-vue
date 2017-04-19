@@ -1,6 +1,8 @@
 <template>
 <div class="singlePost">
 
+
+
   <div v-if="!singleLoaded" class="singleLoaded">
 
     <h1 class="headerElement">Loading</h1>
@@ -11,7 +13,9 @@
     <!-- <h1 class="headerElement" v-text="postJsonStudent"></h1> -->
     <span class="headerElement">Work</span>
     <span class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
-    <span class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span>
+
+    <span v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
+    <span v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span>
 
 
   </div>
@@ -50,9 +54,15 @@
 <script>
 export default {
 
-  props: ['showIndex'],
+  props: ['showIndex','loaded','showIndexFirst'],
 
   methods: {
+
+    goBack: function(){
+      // alert('hey')
+      this.$router.go(-1)
+
+    },
     getContent: function(id) {
 
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/yearpost/' + id).then(function(response) {
@@ -70,13 +80,15 @@ export default {
               vm.singleLoaded = true;
               // vm.indexLoaded = true
             }, 500)
+
+            this.yearviewquery = this.$route.query.yearview
+            // console.log(this.$router)
           })
         }
       })
     }
   },
   created: function() {
-    // this.year = this.$route.query.year
 
     this.getContent(this.$route.params.id)
   },
@@ -88,6 +100,7 @@ export default {
       postJsonStudent: '',
       postJsonContentMedia: '',
       postJsonAttachedField: [],
+      yearviewquery:'',
       year: '',
       yearColor: '',
       singleLoaded: false
@@ -276,7 +289,9 @@ export default {
                     margin-bottom: 0;
                     margin-top: $mainPadding;
                 }
-                text-transform: uppercase;
+                span:not(:first-of-type){
+                  text-transform: uppercase;
+                }
                 margin-bottom: $mainPadding*2;
             }
         }

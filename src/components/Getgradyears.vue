@@ -1,4 +1,4 @@
- <template>
+ <template >
 <div>
 
   <div v-if="!indexLoaded" class="indexLoaded">
@@ -17,8 +17,8 @@
       </div>
 
 
-      <Splashposts v-bind:yearColor="year.acf.yearcolor" v-bind:year="year.name" v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][1].href"></Splashposts>
-      <Listposts v-on:stopIndexLoad="stopIndexLoad()" v-bind:yearColor="year.acf.yearcolor" v-bind:style="{'background':year.acf.yearcolor}" v-bind:id="'listPosts'+year.name" v-bind:index="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][2].href"></Listposts>
+      <Splashposts v-bind:yearviewIndex=index v-bind:yearColor="year.acf.yearcolor" v-bind:year="year.name" v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][1].href"></Splashposts>
+      <Listposts v-on:stopIndexLoad="stopIndexLoad()" v-bind:yearColor="year.acf.yearcolor" v-bind:style="{'background':year.acf.yearcolor}" v-bind:id="'listPosts'+year.name" v-bind:indexGradyears="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][2].href"></Listposts>
     </div>
   </div>
 </div>
@@ -49,6 +49,7 @@ export default {
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8').then(function(response) {
         this.gradyears = response.body
         this.attachExtras()
+        this.goToYear(parseInt(this.$route.query.yearview))
 
 
       })
@@ -67,20 +68,45 @@ export default {
   watch: {
     '$route' (to, from) {
 
-      if (to.path === '/' && this.homeVisited === false) {
+
+      if (to.path === '/' && this.homeVisited === false && from.path !== '/') {
         this.indexLoaded = false
         this.stopIndexLoad()
 
       }
 
+        if (to.path === '/'){
+          this.goToYear(parseInt(to.query.yearview))
+
+        }
+
+
       if (from.path === '/') {
+        // console.log(from.path)
         this.homeVisited = true
       }
+      // console.log(from.path)
 
     }
   },
 
   methods: {
+
+    goToYear: function(id){
+      // alert('hey')
+      if(this.$route.query.yearview){
+        for (var i = 0; i < this.gradyears.length; i++) {
+          if (i === id){
+            this.$set(this.collapsed, i, false)
+
+          }else{
+
+            this.$set(this.collapsed, i, true)
+          }
+        }
+      }
+
+    },
 
     stopIndexLoad: function() {
       var vm = this
@@ -101,16 +127,32 @@ export default {
       }
     },
 
-    clickNext: function(index) {
+    clickNext: function(index, yearNumber) {
       this.$set(this.collapsed, index, true)
       this.$set(this.collapsed, index + 1, false)
       this.$SmoothScroll(0, 500);
 
+      this.$router.push({
+        query: {
+          yearview: index+1
+        }
+      })
+
     },
-    clickPrev: function(index) {
+    clickPrev: function(index, yearNumber) {
+
       this.$set(this.collapsed, index, true)
       this.$set(this.collapsed, index - 1, false)
       this.$SmoothScroll(0, 500);
+
+
+      this.$router.push({
+        query: {
+          yearview: index-1
+        }
+      })
+
+
 
     },
 
@@ -122,8 +164,16 @@ export default {
     // }, 2000)
 
   },
-  mounted: function() {
 
+  // watch: {
+  //   '$route': function(newRoute) {
+  //
+  //     console.log(newRoute)
+  //     // this.$set(this.collapsed, index, true)
+  //     // this.$set(this.collapsed, index - 1, false)
+  //   }
+  // },
+  mounted: function() {
   }
 }
 </script>

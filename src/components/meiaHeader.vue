@@ -1,7 +1,9 @@
 <template>
 <div id="meiaHeader">
-  <h1 id="pzi" class="headerElement"></h1>
-  <h1 id="meia" class="headerElement alignCenter"><router-link to="/"></router-link></h1>
+
+  <a class="headerElement" href="http://www.pzwart.nl/master-education-in-arts/"><h1 id="pzi" class=""></h1></h1></a>
+
+  <router-link class="headerElement alignCenter" to="/"><h1 id="meia" ></h1></router-link>
   <span class="headerElement alignRight">
     <!-- <button v-on:click="emitToggleNews()">NEWS</button> -->
     <button v-on:click="goToBottom()">ABOUT</button>
@@ -75,6 +77,17 @@ export default {
             font-size: $secFontSizeTablet;
         }
 
+
+        h1{
+          font-size: inherit;
+          font-weight: inherit;
+          display: inline-block;
+          &:hover{
+            border-bottom: 1px solid $mainBackgroundBlack;
+          }
+
+        }
+
     }
 
     #pzi {
@@ -114,7 +127,7 @@ export default {
         &:hover{
           border-bottom: 1px solid $mainBackgroundBlack;
         }
-        
+
         &:first-of-type {
             // padding-right: $mainPadding;
         }

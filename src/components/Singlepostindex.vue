@@ -1,16 +1,23 @@
 <template>
 <div class="single">
-  <div class="singleTitle" v-bind:style="" v-on:click="expandSingle(id)">
-
-    <h1 class="singleRealName" v-html="workstudent"></h1>
-    <h1 v-bind:id="id" class="singleRealTitle" v-bind:style="{ width: 'calc(100% - '+ nameWidth + 'px)' }" v-html="title" v-bind:class="addTitleLengthClass"></h1>
+  <div class="singleTitle" v-on:click="expandSingle(id)">
+    <template v-if="!showSingle">
+      <h1  v-bind:style="{}"  class="singleRealName" v-html="workstudent"></h1>
+      <h1  v-bind:style="{width: 'calc(100% - '+ nameWidth + 'px)'}"  v-bind:id="id" class="singleRealTitle" v-html="title" v-bind:class="addTitleLengthClass"></h1>
+</template>
+    <template v-else>
+<h1 v-bind:style="{'border-top':'1px solid '+yearColor, color: yearColor}" class="singleRealName singleExpanded" v-html="workstudent"></h1>
+<h1 v-bind:style="{'border-top':'1px solid '+yearColor, color: yearColor, 'border-left':'1px solid '+yearColor, width: 'calc(100% - '+ nameWidth + 'px)'}" v-bind:id="id" class="singleRealTitle singleExpanded" v-html="title" v-bind:class="addTitleLengthClass"></h1>
+</template>
     <!-- <h1><span>{{ pickRandomName }}</span><span v-bind:id="id" v-bind:class="addTitleLengthClass">{{title}}</span></h1> -->
     <!-- <h1 v-bind:id="id"><span>{{title}}</h1> -->
   </div>
 
   <div v-bind:class="{ expanded: showSingle }" class="singleContent">
     <!-- </div> -->
-    <router-link class="singleContentInnerLeftLink" v-if="postJsonContentFeaturedImage" v-bind:style="{ 'height': linkLineHeight+'px' }" v-bind:to="{ path: 'work/'+id}"><span>Read More</span></router-link>
+    <router-link class="singleContentInnerLeftLink" v-if="postJsonContentFeaturedImage" v-bind:cameFromIndex=true v-bind:style="{ 'height': linkLineHeight+'px' }" v-bind:to="{ path: 'work/'+id,         query: {
+              yearview: index
+            }}"><span>Read More</span></router-link>
 
 
     <div class="singleContentInner">
@@ -28,20 +35,33 @@
         </div>
 
       </div>
-      <router-link class="singleContentInnerLink" v-if="!postJsonContentFeaturedImage" v-bind:to="{ path: 'work/'+id}"><span>Read More</span></router-link>
+      <router-link v-bind:style="{'border-top-color':yearColor}" class="singleContentInnerLink" v-if="!postJsonContentFeaturedImage" v-bind:to="{ path: 'work/'+id, query: {
+                yearview: index
+              }}"><span>Read More</span></router-link>
       <!-- <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id, query: { year: 'private' }}"><span>→</span></router-link> -->
       <template v-if="postJsonContentFeaturedImage">
-        <div class="singleContentInnerRenderedWrapper" v-bind:style="{ 'margin-bottom': linkLineHeight+'px' }">
-          <div class="singleContentInnerRendered" v-bind:style="{background:yearColor}"  v-html="postJsonContent">
-          </div>
-        </div>
-      </template>
+<div class="singleContentInnerRenderedWrapper" v-bind:style="{ 'margin-bottom': linkLineHeight+'px' }">
+  <p class="singleContentInnerRenderedFullTitle">
+    <span v-html="workstudent"></span>
+    <br />
+    <span v-html="title"></span>
+  </p>
+  <div class="singleContentInnerRendered" v-bind:style="{background:yearColor}" v-html="postJsonContent">
+  </div>
+
+</div>
+</template>
       <template v-else>
-        <div class="singleContentInnerRenderedWrapper">
-          <div class="singleContentInnerRendered" v-html="postJsonContent">
-          </div>
-        </div>
-      </template>
+<div class="singleContentInnerRenderedWrapper">
+  <p class="singleContentInnerRenderedFullTitle">
+    <span v-html="workstudent"></span>
+    <br />
+    <span v-html="title"></span>
+  </p>
+  <div class="singleContentInnerRendered" v-html="postJsonContent">
+  </div>
+</div>
+</template>
 </div>
 </div>
 </div>
@@ -56,7 +76,7 @@ import alertTest from '../assets/alert.js'
 
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'projectslength', 'id', 'workstudent','yearColor'],
+  props: ['title', 'index', 'projectslength', 'id', 'workstudent', 'yearColor'],
   data() {
     return {
       showSingle: false,
@@ -96,7 +116,7 @@ export default {
 
     fitReadmore: function() {
       var vm = this
-      if(window.innerWidth>800){
+      if (window.innerWidth > 800) {
         setTimeout(function() {
           vm.linkLineHeight = vm.$el.querySelector('.singleContent').clientHeight - vm.$el.querySelector('.singleContentInnerRenderedWrapper').clientHeight - 1
         }, 1000)
@@ -105,7 +125,7 @@ export default {
 
     collapseSingle: function() {
       this.showSingle = !this.showSingle
-        // this.postJsonContent = ''
+      // this.postJsonContent = ''
     },
 
     lazyLoadHandleLoaded: function() {
@@ -125,8 +145,8 @@ export default {
         // console.log(el)
         vm.fitReadmore()
         vm.postJsonContentFeaturedImageLoaded = true
-        console.log('LOADED')
-        console.log(naturalHeight)
+        // console.log('LOADED')
+        // console.log(naturalHeight)
         vm.featuredImageCalculatedHeight = 'initial'
 
 
@@ -146,12 +166,12 @@ export default {
         loading,
         error
       }, formCache) {
-        console.log('just loading')
-        console.log(el)
-        console.log(vm.postJsonContentFeaturedImageRelation)
+        // console.log('just loading')
+        // console.log(el)
+        // console.log(vm.postJsonContentFeaturedImageRelation)
 
         vm.featuredImageCalculatedHeight = vm.postJsonContentFeaturedImageRelation * vm.postJsonContentFeaturedImageWidth + 'px'
-          // postJsonContentFeaturedImageRelation*postJsonContentFeaturedImageWidth+'px'
+        // postJsonContentFeaturedImageRelation*postJsonContentFeaturedImageWidth+'px'
       })
     },
 
@@ -166,14 +186,25 @@ export default {
 
         }
 
-        if (vm.title.length > 14 && vm.title.length <= 24) {
-          window.fitText(document.getElementById(vm.id), vm.title.length / 8);
+        if (vm.title.length > 14 && vm.title.length <= 18) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 14);
 
         }
-        if (vm.title.length > 24 && vm.title.length <= 40) {
+
+        if (vm.title.length > 18 && vm.title.length <= 24) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 9);
+
+        }
+        if (vm.title.length > 24 && vm.title.length <= 32) {
+          window.fitText(document.getElementById(vm.id), vm.title.length / 7);
+
+        }
+
+        if (vm.title.length > 32 && vm.title.length <= 40) {
           window.fitText(document.getElementById(vm.id), vm.title.length / 6);
 
         }
+
         if (vm.title.length > 40 && vm.title.length <= 60) {
           window.fitText(document.getElementById(vm.id), vm.title.length / 4);
 
@@ -242,19 +273,19 @@ export default {
   watch: {
     '$route' (to, from) {
 
-      if(to.path === '/'){
-       this.fitTitles()
-       var vm = this
+      if (to.path === '/') {
+        this.fitTitles()
+        var vm = this
 
-       window.setTimeout(function() {
-         vm.fitTitles()
-         window.setTimeout(function() {
-           vm.fitTitles()
-           window.setTimeout(function() {
-             vm.fitTitles()
-           }, 500)
-         }, 500)
-       }, 500)
+        window.setTimeout(function() {
+          vm.fitTitles()
+          window.setTimeout(function() {
+            vm.fitTitles()
+            window.setTimeout(function() {
+              vm.fitTitles()
+            }, 500)
+          }, 500)
+        }, 500)
 
       }
     }
@@ -281,6 +312,10 @@ export default {
         width: 100%;
         clear: both;
         cursor: pointer;
+    }
+
+    .singleExpanded {
+        background: $mainBackgroundBlack;
     }
     .singleRealTitle {
         width: 80%;
@@ -309,7 +344,7 @@ export default {
         border-top: $mainBorderStyle;
         font-size: 32px;
         @include media("<tablet") {
-          font-size: 12px;
+            font-size: 12px;
         }
         // width: 100%;
         font-family: $mainFont;
@@ -320,10 +355,9 @@ export default {
         overflow: hidden;
         height: 130px;
         line-height: 130px;
-
         @include media("<tablet") {
-          height: 70px;
-          line-height: 70px;
+            height: 70px;
+            line-height: 70px;
         }
         span {
             padding: 100px $mainPadding;
@@ -339,18 +373,16 @@ export default {
             &.large {
                 font-size: 7vw;
             }
-
-
             @include media("<tablet") {
-              &.small {
-                  font-size: 1.5vw;
-              }
-              &.mid {
-                  font-size: 2.5vw;
-              }
-              &.large {
-                  font-size: 3.5vw;
-              }
+                &.small {
+                    font-size: 1.5vw;
+                }
+                &.mid {
+                    font-size: 2.5vw;
+                }
+                &.large {
+                    font-size: 3.5vw;
+                }
             }
 
         }
@@ -372,6 +404,7 @@ export default {
         border-top: 0;
     }
     &:first-child {
+
         .singleRealTitle {
             &:hover {
                 border-top: 1px solid $mainBackground;
@@ -383,6 +416,12 @@ export default {
                 border-top: 1px solid $mainBackground;
             }
 
+        }
+    }
+    &:not(:first-child) {
+
+        .singleExpanded {
+            // border-top: 1px solid $mainBackgroundBlack !important;
         }
     }
 
@@ -405,6 +444,14 @@ export default {
         transition: max-height 0.8s, border 0.8s;
         transition-delay: 0.1s;
 
+        .singleContentInnerLink {
+            border-top: $mainBorderStyle;
+            @include media("<tablet") {
+                border-top-color: $mainBackgroundBlack !important;
+            }
+
+        }
+
     }
 
     .singleContentInnerLeftLink {
@@ -415,7 +462,7 @@ export default {
         height: 100%;
         width: 50%;
         @include media("<tablet") {
-          width: 100%;
+            width: 100%;
         }
 
         line-height: $mainHeaderHeight;
@@ -427,9 +474,8 @@ export default {
 
         color: $mainBackgroundBlack;
         font-size: $secFontSize;
-
         @include media("<tablet") {
-          font-size: $secFontSizeTablet;
+            font-size: $secFontSizeTablet;
         }
 
         text-align: center;
@@ -460,13 +506,24 @@ export default {
             z-index: 9;
             width: 50%;
             @include media("<tablet") {
-              width: 100%;
-              margin-bottom: 40px;
+                width: 100%;
+                margin-bottom: 40px;
             }
             // float: left;
             // display: inline-block;
             p {
                 font-size: 30px;
+            }
+
+            .singleContentInnerRenderedFullTitle {
+                margin: 0 0 $mainPadding;
+                font-size: $thirdFontSize;
+                span:not(:first-of-type) {
+                    text-transform: uppercase;
+                }
+                @include media("<tablet") {
+                    font-size: $thirdFontSizeTablet;
+                }
             }
 
         }
@@ -478,12 +535,12 @@ export default {
             justify-content: center;
             width: 50%;
             @include media("<tablet") {
-              width: 100%;
-              height: 40px;
-              margin-bottom:-40px;
-              bottom: 0;
-              border-left: 0;
-              border-top: 1px solid $mainBackgroundBlack;
+                width: 100%;
+                height: 40px;
+                margin-bottom: -40px;
+                bottom: 0;
+                border-left: 0;
+                border-top: 1px solid $mainBackgroundBlack;
             }
             position: absolute;
             height: 100%;
@@ -493,10 +550,8 @@ export default {
             color: $mainBackgroundBlack;
             font-size: $secFontSize;
             @include media("<tablet") {
-              font-size: $secFontSizeTablet;
+                font-size: $secFontSizeTablet;
             }
-
-
             &:hover {
                 color: $mainBackground;
                 background: $mainBackgroundBlack;
@@ -515,8 +570,8 @@ export default {
             // justify-content: center;
             width: 50%;
             @include media("<tablet") {
-              width: 100%;
-              border-left: 0;
+                width: 100%;
+                border-left: 0;
 
             }
             // position: absolute;
@@ -529,7 +584,7 @@ export default {
             color: $mainBackgroundBlack;
             font-size: $thirdFontSize;
             @include media("<tablet") {
-              font-size: $thirdFontSizeTablet;
+                font-size: $thirdFontSizeTablet;
             }
 
             img {
@@ -555,7 +610,7 @@ export default {
                 justify-content: center;
                 font-size: $secFontSize;
                 @include media("<tablet") {
-                  font-size: $secFontSizeTablet;
+                    font-size: $secFontSizeTablet;
                 }
 
                 // -webkit-animation: fadeIn 0.8s infinite alternate;
@@ -583,7 +638,7 @@ export default {
         margin: 0;
         font-size: $thirdFontSize;
         @include media("<tablet") {
-          font-size: $thirdFontSizeTablet;
+            font-size: $thirdFontSizeTablet;
         }
 
     }

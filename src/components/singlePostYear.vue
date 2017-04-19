@@ -21,7 +21,11 @@
   <div v-bind:style="{'border-color':yearColor}" class="signlePostHeader">
     <span id="description" v-bind:style="{color:yearColor}" class="headerElement"></span>
     <span id="year" v-bind:style="{color:yearColor}" class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
-    <span v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span>
+    <!-- <span v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span> -->
+
+{{showIndexFirst}}
+    <span  v-bind:style="{color:yearColor}" v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
+    <span  v-bind:style="{color:yearColor}" v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span>
 
   </div>
   <div class="postcontentWrapper">
@@ -52,10 +56,20 @@ export default {
       type: Boolean,
       default: true
     },
+    showIndexFirst: {
+      type: Boolean,
+    },
   },
 
 
   methods: {
+
+    goBack: function(){
+      // alert('hey')
+      this.$router.go(-1)
+
+    },
+
     getContent: function(yearCategory) {
 
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?search=' + yearCategory).then(function(response) {
@@ -76,7 +90,7 @@ export default {
               vm.singleLoaded = true;
               // vm.indexLoaded = true
             }, 500)
-
+            this.yearviewquery = this.$route.query.yearview
           })
 
         })
@@ -101,8 +115,8 @@ export default {
       year: '',
       splashExcerpt: '',
       yearColor: '',
-      singleLoaded: false
-
+      singleLoaded: false,
+      yearviewquery:''
     }
   },
 

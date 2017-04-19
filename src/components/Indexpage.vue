@@ -9,7 +9,7 @@
   </div> -->
   <meiaHeader v-on:emitToggleNews="toggleNews()"></meiaHeader>
 
-  <router-view></router-view>
+  <router-view v-bind:loaded=loaded v-bind:showIndexFirst=showIndexFirst></router-view>
   <div v-show="showIndex">
     <!-- <meiaNews v-bind:expandedActive="showNews"></meiaNews> -->
     <Getgradyears></Getgradyears>
@@ -42,7 +42,9 @@ export default {
   data: function() {
     return {
       showIndex: true,
-      showNews: false
+      showNews: false,
+      loaded: false,
+      showIndexFirst: false
     }
   },
 
@@ -51,9 +53,13 @@ export default {
     '$route': function(newRoute, oldRoute) {
       if (this.$route.path.toString() === "/") {
         this.showIndex = true
+        this.showIndexFirst = true
       } else {
+        this.showIndexFirst = true
         this.showIndex = false
       }
+
+
 
     },
   },
@@ -68,14 +74,15 @@ export default {
 
   methods: {
     alertthis: function() {
-      console.log('cereate')
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     },
     toggleNews: function(){
       this.showNews = !this.showNews
     }
   },
   created: function() {
-    this.alertthis()
+    // this.alertthis()
+    this.loaded = true
 
 
   }
