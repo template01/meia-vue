@@ -76,7 +76,7 @@ import alertTest from '../assets/alert.js'
 
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'projectslength', 'id', 'workstudent', 'yearColor'],
+  props: ['title', 'index', 'projectslength', 'id', 'workstudent', 'yearColor','collapseAll', 'yearview'],
   data() {
     return {
       showSingle: false,
@@ -99,9 +99,11 @@ export default {
         // if (this.postJsonContent.length === 0) {
 
         this.postJsonContent = response.body.acf.excerpt_field
-        this.postJsonContentFeaturedImage = response.body.acf.featuredimage.sizes.large
-        this.postJsonContentFeaturedImageWidth = this.$el.querySelector('.singleContentInnerFeatured').clientWidth
-        this.postJsonContentFeaturedImageRelation = response.body.acf.featuredimage.sizes['large-height'] / response.body.acf.featuredimage.sizes['large-width']
+        if(response.body.acf.featuredimage){
+          this.postJsonContentFeaturedImage = response.body.acf.featuredimage.sizes.large
+          this.postJsonContentFeaturedImageWidth = this.$el.querySelector('.singleContentInnerFeatured').clientWidth
+          this.postJsonContentFeaturedImageRelation = response.body.acf.featuredimage.sizes['large-height'] / response.body.acf.featuredimage.sizes['large-width']
+        }
         if (this.showSingle) {
           // console.log(this.postJsonContentFeaturedImage)
           this.lazyLoadHandleLoaded()
@@ -145,6 +147,9 @@ export default {
         // console.log(el)
         vm.fitReadmore()
         vm.postJsonContentFeaturedImageLoaded = true
+        setTimeout(function() {
+          vm.postJsonContentFeaturedImageLoaded = true
+        }, 100)
         // console.log('LOADED')
         // console.log(naturalHeight)
         vm.featuredImageCalculatedHeight = 'initial'
@@ -271,6 +276,12 @@ export default {
   },
 
   watch: {
+
+    collapseAll: function(){
+      if(this.collapseAll === this.yearview){
+        this.showSingle = false
+      }
+    },
     '$route' (to, from) {
 
       if (to.path === '/') {
@@ -353,8 +364,8 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        height: 130px;
-        line-height: 130px;
+        height: 110px;
+        line-height: 110px;
         @include media("<tablet") {
             height: 70px;
             line-height: 70px;

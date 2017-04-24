@@ -1,12 +1,3 @@
-<!-- <template>
-<div class="singlePost">
-  <h1 v-text="postJsonTitle"></h1>
-  <hr>
-  <hr>
-  <div v-html="postJsonContent"></div>
-</div>
-</template> -->
-
 <template>
 <div class="singlePostYear">
 
@@ -23,24 +14,30 @@
     <span id="year" v-bind:style="{color:yearColor}" class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
     <!-- <span v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span> -->
 
-{{showIndexFirst}}
     <span  v-bind:style="{color:yearColor}" v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
-    <span  v-bind:style="{color:yearColor}" v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span>
+    <span v-bind:style="{color:yearColor}" v-else  class="headerElement alignRight" v-text=""><a @click="goBackNone()">Back</a></span>
+    <!--
+    <span  v-bind:style="{color:yearColor}" v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span> -->
 
   </div>
   <div class="postcontentWrapper">
     <div class="postcontentWrapperTitle">
-      <p v-bind:style="{color:yearColor}">{{postJsonTitle}}</p>
+      <p v-bind:style="{color:yearColor}" v-html="postJsonTitle"></p>
 
     </div>
     <div class="postcontentWrapperInner">
       <div class="left">
-        <p v-bind:style="{color:yearColor}" class="splashExcerpt" v-html="splashExcerpt"></p>
+        <!-- <p v-bind:style="{color:yearColor}" class="splashExcerpt" v-html="splashExcerpt"></p> -->
         <div v-html="postJsonContentMedia"></div>
       </div>
       <div v-bind:style="{background:yearColor}" class="right" v-html="postJsonContent"></div>
     </div>
-
+    <div v-bind:style="{color:yearColor}"  v-if="postJsonContentFullSize" class="postcontentFullSize">
+      <div class="fullSizeContent" >
+        <img v-for="img in postJsonContentFullSize" v-bind:src="img.url"/>
+        <!-- <img src="http://placehold.it/1920x1080" /> -->
+      </div>
+    </div>
 
 
   </div>
@@ -70,6 +67,16 @@ export default {
 
     },
 
+
+    goBackNone: function(){
+
+      setTimeout(function(){
+        window.scrollTo(0,0)
+      },500)
+      this.$router.push({ path: '/', query: { yearview: this.yearviewquery }})
+
+    },
+
     getContent: function(yearCategory) {
 
       this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?search=' + yearCategory).then(function(response) {
@@ -78,6 +85,7 @@ export default {
           this.postJsonTitle = response.body[0].title.rendered
           this.splashExcerpt = response.body[0].acf.excerpt
           this.postJsonContentMedia = response.body[0].acf.media_field
+          this.postJsonContentFullSize = response.body[0].acf.full_size
 
 
 
@@ -112,6 +120,7 @@ export default {
       postJsonContent: '',
       postJsonTitle: '',
       postJsonContentMedia: '',
+      postJsonContentFullSize:'',
       year: '',
       splashExcerpt: '',
       yearColor: '',
@@ -156,6 +165,7 @@ export default {
         a {
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
             &:hover {
                 border-bottom: 1px solid;
                 border-color: inherit;
@@ -176,7 +186,7 @@ export default {
         align-items: center;
         justify-content: center;
         height: $mainHeaderHeight;
-        border-top: $mainBorderStyle;
+        // border-top: $mainBorderStyle;
         border-bottom: 1px solid $mainBackground;
         height: $mainHeaderHeight;
         background: $mainBackgroundBlack;
@@ -221,6 +231,8 @@ export default {
 
         .alignCenter {
             text-align: center;
+            padding: 0;
+
         }
         .alignRight {
             text-align: right;
@@ -234,7 +246,7 @@ export default {
 
     .postcontentWrapper {
         img {
-            max-width: 10px;
+            // max-width: 10px;
         }
         width: 100%;
         clear: both;
@@ -321,6 +333,17 @@ export default {
 .singlePostYear {
 
     .postcontentWrapper {
+
+        .postcontentFullSize{
+          width: 100%;
+          background: $mainBackgroundBlack;
+          padding: $mainPadding;
+          img{
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+          }
+        }
         color: $mainBackgroundBlack;
 
         .left {
@@ -358,6 +381,19 @@ export default {
         }
 
     }
+
+
+    .wp-video{
+      width: 100% !important;
+    }
+
+    video,audio,iframe{
+      background: $mainBackgroundBlack;
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+    }
+
 
 }
 </style>

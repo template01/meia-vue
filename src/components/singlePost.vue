@@ -15,7 +15,8 @@
     <span class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
 
     <span v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
-    <span v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span>
+    <span v-else="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBackNone()">Back</a></span>
+    <!-- <span v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span> -->
 
 
   </div>
@@ -61,6 +62,15 @@ export default {
     goBack: function(){
       // alert('hey')
       this.$router.go(-1)
+
+    },
+
+    goBackNone: function(){
+
+      setTimeout(function(){
+        window.scrollTo(0,0)
+      },500)
+      this.$router.push({ path: '/', query: { yearview: this.yearviewquery }})
 
     },
     getContent: function(id) {
@@ -114,6 +124,10 @@ export default {
 
 <style scoped lang="scss">@import "../scss/globalVars.scss";
 
+
+
+
+
 .singleLoaded {
     background-color: $mainBackgroundBlack;
     position: fixed;
@@ -145,6 +159,7 @@ export default {
         a {
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
             &:hover {
                 border-bottom: 1px solid $mainBackgroundBlack;
             }
@@ -182,6 +197,7 @@ export default {
 
         .alignCenter {
             text-align: center;
+            padding: 0;
         }
         .alignRight {
             text-align: right;
@@ -354,6 +370,19 @@ export default {
         }
 
     }
+
+    .wp-video{
+      width: 100% !important;
+    }
+
+    video,audio,iframe{
+      background: $mainBackgroundBlack;
+
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+    }
+
 
 }
 </style>

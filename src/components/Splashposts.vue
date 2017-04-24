@@ -3,7 +3,7 @@
 <!-- <div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }"> -->
 <div class="splashPost" v-bind:class="{ expanded: showSplash }">
   <div class="titleWrap">
-    <h1 v-bind:style="{color:this.yearColor}">{{yearTitle}}</h1>
+    <h1 v-bind:style="{color:this.yearColor}" v-html="yearTitle"></h1>
   </div>
   <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
   </div>
@@ -12,7 +12,7 @@
       <!-- <span>Graduates ↓</span> -->
       <span>Graduates</span>
     </div>
-    <div class="singleContentInnerLinkOuter">
+    <div v-bind:style="{color:this.yearColor, 'border-color':this.yearColor}" class="singleContentInnerLinkOuter">
       <template v-if="this.splashProgramme">
         <div @click="expandedProgramme=!expandedProgramme" class="singleContentInnerLink border-right" v-bind:style="{'border-color':this.yearColor}">
           <div>
@@ -133,6 +133,7 @@ export default {
         padding: $mainPadding;
         border-top: $mainBorderStyle;
         color: $mainBackgroundBlack;
+        clear: both;
         margin: 0;
         p {
             margin: 0;
@@ -141,6 +142,9 @@ export default {
         font-size: $thirdFontSize;
         @include media("<tablet") {
             font-size: $thirdFontSizeTablet;
+            border-top: 0;
+
+
         }
     }
 
@@ -218,6 +222,11 @@ export default {
                     border-right: 0 !important;
                     border-bottom: $mainBorderStyle;
                 }
+                &:last-of-type{
+                  border-bottom: $mainBorderStyle;
+
+                }
+
             }
         }
 

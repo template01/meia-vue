@@ -64,6 +64,7 @@ export default {
     justify-content: center;
     height: $mainHeaderHeight;
     .headerElement {
+        cursor: pointer;
         color: $mainBackgroundBlack;
         text-transform: uppercase;
         font-weight: normal;

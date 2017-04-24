@@ -12,13 +12,13 @@
       <div v-bind:style="{'border-color':year.acf.yearcolor}" class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
         <span v-on:click="clickPrev(index)" class="left">← Past</span>
-        <span class="uppercase">Year<br class="tabletView" /> {{year.name}}</span>
+        <span v-on:click="clickCollapseAll(index)" class="uppercase hoverYear"><span v-on:mouseover="hover=true" v-if="!hover">Year<br class="tabletView" /> {{year.name}}</span><span v-else  v-on:mouseout="hover=false" >Collapse All projects</span></span>
         <span v-on:click="clickNext(index)" class="right">Future →</span>
       </div>
 
 
       <Splashposts v-bind:yearviewIndex=index v-bind:yearColor="year.acf.yearcolor" v-bind:year="year.name" v-bind:listpostId="'listPosts'+year.name" v-bind:categorylink="year._links['wp:post_type'][1].href"></Splashposts>
-      <Listposts v-on:stopIndexLoad="stopIndexLoad()" v-bind:yearColor="year.acf.yearcolor" v-bind:style="{'background':year.acf.yearcolor}" v-bind:id="'listPosts'+year.name" v-bind:indexGradyears="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][2].href"></Listposts>
+      <Listposts v-bind:yearview=index v-bind:collapseAll=collapseAll  v-on:stopIndexLoad="stopIndexLoad()" v-bind:yearColor="year.acf.yearcolor" v-bind:style="{'background':year.acf.yearcolor}" v-bind:id="'listPosts'+year.name" v-bind:indexGradyears="index" v-bind:categoryyear="year.name" v-bind:categorylink="year._links['wp:post_type'][2].href"></Listposts>
     </div>
   </div>
 </div>
@@ -35,12 +35,14 @@ export default {
   },
   data() {
     return {
+      hover:false,
       yearWrapperHeight: [],
       gradyears: [],
       collapsed: [],
       ListpostId: 'iddd',
       indexLoaded: false,
-      homeVisited: false
+      homeVisited: false,
+      collapseAll: false
     }
   },
   created: function() {
@@ -137,6 +139,16 @@ export default {
           yearview: index+1
         }
       })
+
+    },
+
+    clickCollapseAll: function(index){
+      this.collapseAll = index
+      console.log(this.collapseAll)
+      var vm = this
+      setTimeout(function() {
+        vm.collapseAll = 'x'
+      }, 1)
 
     },
     clickPrev: function(index, yearNumber) {
@@ -256,7 +268,6 @@ export default {
         align-items: center;
         justify-content: center;
 
-        // cursor: pointer;
         .left {
             text-align: left;
             padding: $mainPadding;
@@ -264,6 +275,10 @@ export default {
         .right {
             text-align: right;
             padding: $mainPadding;
+        }
+        .hoverYear{
+          cursor: pointer;
+
         }
     }
     &:not(first-of-type) {
