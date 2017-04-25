@@ -12,7 +12,7 @@
       <div v-bind:style="{'border-color':year.acf.yearcolor}" class="yearNavigation">
         <div>{{gradyears[index].slideoutactive}}</div>
         <span v-on:click="clickPrev(index)" class="left">← Past</span>
-        <span v-on:click="clickCollapseAll(index)" class="uppercase hoverYear"><span v-on:mouseover="hover=true" v-if="!hover">Year<br class="tabletView" /> {{year.name}}</span><span v-else  v-on:mouseout="hover=false" >Collapse All projects</span></span>
+        <span v-on:click="clickCollapseAll(index)" class="uppercase hoverYear"><span class="ignoreTop" v-on:mouseover="hover=true" v-if="!hover">Year<br class="tabletView" /> {{year.name}}</span><span class="ignoreTop" v-else  v-on:mouseout="hover=false" >Collapse All projects</span></span>
         <span v-on:click="clickNext(index)" class="right">Future →</span>
       </div>
 
@@ -322,7 +322,7 @@ export default {
 
 }
 
-span {
+span:not(.ignoreTop) {
     width: 33.33333%;
     text-align: center;
     // font-size: $secFontSize;

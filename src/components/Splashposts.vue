@@ -3,7 +3,12 @@
 <!-- <div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }"> -->
 <div class="splashPost" v-bind:class="{ expanded: showSplash }">
   <div class="titleWrap">
-    <h1 v-bind:style="{color:this.yearColor}" v-html="yearTitle"></h1>
+
+    <router-link class="" v-bind:to="{ path: 'year/'+year,         query: {
+              yearview: yearviewIndex
+            }}">
+            <h1 v-bind:style="{color:this.yearColor}" v-html="yearTitle"></h1>
+    </router-link>
   </div>
   <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
   </div>
@@ -152,6 +157,10 @@ export default {
         padding: $mainPadding;
         @include media("<tablet") {
             padding-bottom: 0;
+        }
+
+        a{
+          text-decoration: none;
         }
         h1 {
             // padding-top: $mainPadding;

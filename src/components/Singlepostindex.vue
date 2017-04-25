@@ -44,7 +44,7 @@
   <p class="singleContentInnerRenderedFullTitle">
     <span v-html="workstudent"></span>
     <br />
-    <span v-html="title"></span>
+    <span v-html="fulltitle"></span>
   </p>
   <div class="singleContentInnerRendered" v-bind:style="{background:yearColor}" v-html="postJsonContent">
   </div>
@@ -56,7 +56,7 @@
   <p class="singleContentInnerRenderedFullTitle">
     <span v-html="workstudent"></span>
     <br />
-    <span v-html="title"></span>
+    <span v-html="fulltitle"></span>
   </p>
   <div class="singleContentInnerRendered" v-html="postJsonContent">
   </div>
@@ -76,7 +76,7 @@ import alertTest from '../assets/alert.js'
 
 export default {
   name: 'singlepostindex',
-  props: ['title', 'index', 'projectslength', 'id', 'workstudent', 'yearColor','collapseAll', 'yearview'],
+  props: ['title','fulltitle', 'index', 'projectslength', 'id', 'workstudent', 'yearColor','collapseAll', 'yearview'],
   data() {
     return {
       showSingle: false,
