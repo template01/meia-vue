@@ -2,7 +2,7 @@
 
 @import "../../node_modules/include-media/dist/_include-media.scss";
 
-$breakpoints: (phone: 640px, tablet: 800px, desktop: 1024px);
+$breakpoints: (phone: 640px, tablet: 800px, desktop: 1280px);
 
 $mainFont: Arial;
 
@@ -11,6 +11,7 @@ $mainFontHeavy:900;
 $mainFontSize: 30px;
 $secFontSize: 18px;
 $thirdFontSize: 22px;
+$desktopFontSize: 26px;
 
 
 
@@ -35,7 +36,7 @@ $mainBackgroundGrey: darkgrey;
 // $mainBackgroundPink: mistyrose;
 $mainBackgroundPink: #ffe5e9;
 
-$mainBackgroundBlack:rgb(50, 50, 50);
+$mainBackgroundBlack:rgb(40, 40, 40);
 
 
 $mainHeaderHeight: 40px;

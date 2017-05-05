@@ -111,6 +111,10 @@ export default {
               #`+this.$el.getAttribute('id')+` .singleContent .singleContentInnerLeftLink:hover {
                           color:`+ this.yearColor+`;
               }
+              #`+this.$el.getAttribute('id')+` .singleContent .singleContentInnerLeftLink span:hover {
+                          color:`+ this.yearColor+`;
+              }
+
 
               #`+this.$el.getAttribute('id')+` .singleContent .singleContentInnerLink:hover {
                           color:`+ this.yearColor+`;

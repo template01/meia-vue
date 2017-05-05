@@ -28,7 +28,7 @@
 
     var settings = extend({
       'minFontSize' : 32,
-      'maxFontSize' : 80
+      'maxFontSize' : 64
     },options);
 
 

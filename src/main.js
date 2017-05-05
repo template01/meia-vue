@@ -17,6 +17,10 @@ import Getgradyears from './components/Getgradyears'
 // window._ = require('lodash');
 // Vue.use(lodash)
 
+// var offset = require('document-offset')
+
+
+
 
 var vueSmoothScroll = require('vue-smoothscroll');
 Vue.use(vueSmoothScroll);

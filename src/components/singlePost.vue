@@ -272,6 +272,10 @@ export default {
                 @include media("<tablet") {
                     font-size: $thirdFontSizeTablet;
                 }
+
+                @include media(">desktop") {
+                    font-size: $desktopFontSize;
+                }
                 text-indent: 0;
                 padding-left: 0;
                 margin-bottom: $mainPadding;
@@ -300,6 +304,10 @@ export default {
 
             .postcontentWrapperTitle {
                 font-size: $thirdFontSize;
+                @include media(">desktop") {
+                    font-size: $desktopFontSize;
+                }
+
                 @include media("<tablet") {
                     font-size: $thirdFontSizeTablet;
                     margin-bottom: 0;
@@ -363,6 +371,11 @@ export default {
         }
 
         p {
+
+          @include media(">desktop") {
+              font-size: $desktopFontSize;
+          }
+
             font-size: $thirdFontSize;
             @include media("<tablet") {
                 font-size: $thirdFontSizeTablet;

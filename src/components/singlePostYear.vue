@@ -14,28 +14,34 @@
     <span id="year" v-bind:style="{color:yearColor}" class="headerElement alignCenter">Year<br class="tabletView" /> {{year}}</span>
     <!-- <span v-bind:style="{color:yearColor}" class="headerElement alignRight" v-text=""><router-link to="/">Back</router-link></span> -->
 
-    <span  v-bind:style="{color:yearColor}" v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
-    <span v-bind:style="{color:yearColor}" v-else  class="headerElement alignRight" v-text=""><a @click="goBackNone()">Back</a></span>
+    <span v-bind:style="{color:yearColor}" v-if="showIndexFirst" class="headerElement alignRight" v-text=""><a @click="goBack()">Back</a></span>
+    <span v-bind:style="{color:yearColor}" v-else class="headerElement alignRight" v-text=""><a @click="goBackNone()">Back</a></span>
     <!--
     <span  v-bind:style="{color:yearColor}" v-else class="headerElement alignRight" v-text=""><router-link :to="{ path: '/', query: { yearview: yearviewquery }}">Back</router-link></span> -->
 
   </div>
   <div class="postcontentWrapper">
-    <div class="postcontentWrapperTitle">
-      <p v-bind:style="{color:yearColor}" v-html="postJsonTitle"></p>
-
-    </div>
     <div class="postcontentWrapperInner">
       <div class="left">
+
+        <div class="postcontentWrapperTitle">
+
+          <p class="splashTitle" v-bind:style="{color:yearColor, 'border-color':yearColor,'transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-webkit-transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-ms-transform:':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)'}"
+            v-html="postJsonTitle"></p>
+
+        </div>
+
         <!-- <p v-bind:style="{color:yearColor}" class="splashExcerpt" v-html="splashExcerpt"></p> -->
         <div v-html="postJsonContentMedia"></div>
       </div>
       <div v-bind:style="{background:yearColor}" class="right" v-html="postJsonContent"></div>
     </div>
-    <div v-bind:style="{color:yearColor}"  v-if="postJsonContentFullSize" class="postcontentFullSize">
-      <div class="fullSizeContent" >
-        <img v-for="img in postJsonContentFullSize" v-bind:src="img.url"/>
+    <div v-bind:style="{color:yearColor}" v-if="postJsonContentFullSize" class="postcontentFullSize">
+      <div class="fullSizeContent">
+
+        <img v-for="img in postJsonContentFullSize" v-bind:src="img.sizes.large" v-bind:style="{'max-width': img.width/img.height<1 ? '40%':''}" />
         <!-- <img src="http://placehold.it/1920x1080" /> -->
+
       </div>
     </div>
 
@@ -61,19 +67,24 @@ export default {
 
   methods: {
 
-    goBack: function(){
+    goBack: function() {
       // alert('hey')
       this.$router.go(-1)
 
     },
 
 
-    goBackNone: function(){
+    goBackNone: function() {
 
-      setTimeout(function(){
-        window.scrollTo(0,0)
-      },500)
-      this.$router.push({ path: '/', query: { yearview: this.yearviewquery }})
+      setTimeout(function() {
+        window.scrollTo(0, 0)
+      }, 500)
+      this.$router.push({
+        path: '/',
+        query: {
+          yearview: this.yearviewquery
+        }
+      })
 
     },
 
@@ -86,6 +97,10 @@ export default {
           this.splashExcerpt = response.body[0].acf.excerpt
           this.postJsonContentMedia = response.body[0].acf.media_field
           this.postJsonContentFullSize = response.body[0].acf.full_size
+          this.yearTitleSkew = response.body[0].acf.title_skew.toString()
+          this.yearTitleRotate = response.body[0].acf.title_rotate.toString()
+
+          window.fitText(this.$el.querySelector('.splashTitle'));
 
 
 
@@ -120,19 +135,22 @@ export default {
       postJsonContent: '',
       postJsonTitle: '',
       postJsonContentMedia: '',
-      postJsonContentFullSize:'',
+      postJsonContentFullSize: '',
       year: '',
       splashExcerpt: '',
       yearColor: '',
       singleLoaded: false,
-      yearviewquery:''
+      yearviewquery: '',
+      yearTitleRotate:'0',
+      yearTitleSkew:'0'
     }
   },
 
 }
 </script>
 
-<style scoped lang="scss">@import "../scss/globalVars.scss";
+<style scoped lang="scss">
+@import "../scss/globalVars.scss";
 
 .singleLoaded {
     background-color: $mainBackgroundBlack;
@@ -255,12 +273,34 @@ export default {
             overflow-x: hidden;
         }
         .postcontentWrapperTitle {
+
+
             background: $mainBackgroundBlack;
-            padding: $mainPadding;
+            padding-bottom: $mainPadding*2;
+            padding-top: $mainPadding;
+
+            @include media("<tablet") {
+                padding-top: $mainPadding*2;
+            }
+
+            text-align: center;
             p {
-                font-size: 90px;
-                margin: 0;
-                line-height: 90px;
+              // text-transform: uppercase;
+                width: 75%;
+                margin: 0 auto;
+                text-align: center;
+                margin-top: $mainPadding;
+                padding-top: $mainPadding*4.5;
+                padding-bottom: $mainPadding*4;
+                padding-left: 9%;
+                padding-right: 10%;
+                border: $mainBorderStyle;
+                border-color: blue;
+                border-radius: 100%;
+
+
+                font-size: 64px;
+                line-height: 64px;
                 font-weight: 900;
                 @include media("<tablet") {
                     font-size: 32px;
@@ -329,20 +369,26 @@ export default {
 }
 </style>
 
-<style lang="scss">@import "../scss/globalVars.scss";
+<style lang="scss">
+@import "../scss/globalVars.scss";
 .singlePostYear {
 
     .postcontentWrapper {
 
-        .postcontentFullSize{
-          width: 100%;
-          background: $mainBackgroundBlack;
-          padding: $mainPadding;
-          img{
-            max-width: 100%;
-            margin: 0 auto;
-            display: block;
-          }
+        .postcontentFullSize {
+            width: 100%;
+            background: $mainBackgroundBlack;
+            padding: $mainPadding;
+            img {
+                max-width: 100%;
+                margin: 0 auto;
+                display: block;
+                @include media(">desktop") {
+                    max-width: 65%;
+
+                }
+            }
+
         }
         color: $mainBackgroundBlack;
 
@@ -378,22 +424,25 @@ export default {
             @include media("<tablet") {
                 font-size: $thirdFontSizeTablet;
             }
+            @include media(">desktop") {
+                font-size: $desktopFontSize;
+            }
         }
 
     }
 
-
-    .wp-video{
-      width: 100% !important;
+    .wp-video {
+        width: 100% !important;
     }
 
-    video,audio,iframe{
-      background: $mainBackgroundBlack;
-      margin: 0 auto;
-      display: block;
-      max-width: 100%;
+    audio,
+    iframe,
+    video {
+        background: $mainBackgroundBlack;
+        margin: 0 auto;
+        display: block;
+        max-width: 100%;
     }
-
 
 }
 </style>

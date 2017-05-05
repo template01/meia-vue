@@ -59,6 +59,9 @@ export default {
         this.showIndex = false
       }
 
+      setTimeout(function(){
+        window.fitText(document.querySelectorAll('.splashTitle'));
+      },1)
 
 
     },

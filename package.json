@@ -9,6 +9,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "document-offset": "^1.0.4",
     "include-media": "^1.4.9",
     "lodash": "^4.17.4",
     "swiper": "^3.4.1",
