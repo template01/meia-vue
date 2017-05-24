@@ -120,6 +120,13 @@ export default {
                           color:`+ this.yearColor+`;
               }
 
+
+              .singleContentInner:hover {
+                          background:`+ this.yearColor+`;
+                        
+
+              }
+
           </style>`
       );
     },

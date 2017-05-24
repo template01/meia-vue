@@ -26,7 +26,7 @@
             <div class="singleContentInnerLeftLink" v-if="postJsonContentFeaturedImage" v-bind:cameFromIndex=true v-bind:style="{ 'height': linkLineHeight+'px' }" >
               <router-link v-bind:to="{ path: 'work/'+id,         query: {
                         yearview: index
-                      }}"><span>To Work Page</span></router-link>
+                      }}"><span>Read More</span></router-link>
             </div>
 
 
@@ -47,7 +47,7 @@
       </div>
       <router-link v-bind:style="{'border-top-color':yearColor}" class="singleContentInnerLink" v-if="!postJsonContentFeaturedImage" v-bind:to="{ path: 'work/'+id, query: {
                 yearview: index
-              }}"><span>To Work Page</span></router-link>
+              }}"><span>Read More</span></router-link>
       <!-- <router-link class="singleContentInnerLink" v-bind:to="{ path: 'work/'+id, query: { year: 'private' }}"><span>→</span></router-link> -->
       <template v-if="postJsonContentFeaturedImage">
 <div class="singleContentInnerRenderedWrapper" v-bind:style="{ 'margin-bottom': linkLineHeight+'px' }">
@@ -113,7 +113,7 @@ export default {
 
 
 
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/yearpost/' + id).then(function(response) {
+      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/yearpost/' + id +'?per_page=100').then(function(response) {
 
         // if (this.postJsonContent.length === 0) {
 
@@ -428,10 +428,12 @@ export default {
             background-color: $mainBackgroundBlack;
         }
         &.close:before {
-            transform: rotate(45deg);
+          transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
         }
         &.close:after {
-            transform: rotate(-45deg);
+          transform: rotate(-45deg);
+          -webkit-transform: rotate(-45deg);
         }
         @include media("<tablet") {
             height: 72px;

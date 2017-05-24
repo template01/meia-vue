@@ -48,7 +48,7 @@ export default {
   created: function() {
 
     if (this.gradyears.length === 0) {
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8').then(function(response) {
+      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?parent=2&per_page=100').then(function(response) {
         this.gradyears = response.body
         this.attachExtras()
         this.goToYear(parseInt(this.$route.query.yearview))

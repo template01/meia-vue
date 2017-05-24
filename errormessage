@@ -7,11 +7,11 @@ DNS_PROBE_FINISHED_BAD_CONFIG
 
 
 
-localhost/:1 Uncaught (in promise) Responsebody: nulldata: (...)get data: get()set data: set(body)headers: Headersok: falsestatus: 0statusText: ""url: "http://api-placeholder.template-studio.nl/wp-json/wp/v2/posts"__proto__: Object
+localhost/:1 Uncaught (in promise) Responsebody: nulldata: (...)get data: get()set data: set(body)headers: Headersok: falsestatus: 0statusText: ""url: "http://meia.pzwart.nl/backend/wp-json/wp/v2/posts"__proto__: Object
 
 
 
-vue-resource.common.js?2f13:1071 GET http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8 net::ERR_NAME_RESOLUTION_FAILED
+vue-resource.common.js?2f13:1071 GET http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?parent=8 net::ERR_NAME_RESOLUTION_FAILED
 (anonymous) @ vue-resource.common.js?2f13:1071
 PromiseObj @ vue-resource.common.js?2f13:198
 xhrClient @ vue-resource.common.js?2f13:1025
@@ -85,4 +85,4 @@ fn @ app.js:87
 __webpack_require__ @ app.js:556
 (anonymous) @ app.js:579
 (anonymous) @ app.js:582
-localhost/:1 Uncaught (in promise) Response {url: "http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?parent=8", ok: false, status: 0, statusText: "", headers: Headers…}
+localhost/:1 Uncaught (in promise) Response {url: "http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?parent=8", ok: false, status: 0, statusText: "", headers: Headers…}

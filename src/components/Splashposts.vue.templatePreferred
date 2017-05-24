@@ -3,7 +3,7 @@
 <!-- <div class="splashPost" v-on:click="expandSplash()" v-bind:class="{ expanded: showSplash }"> -->
 
 
-<div class="splashPost" v-bind:class="{ expanded: showSplash }">
+<div class="splashPost">
 
   <div class="splashTextContentWrap">
 
@@ -13,40 +13,34 @@
       <router-link class="" v-bind:to="{ path: 'year/'+year,         query: {
               yearview: yearviewIndex
             }}">
+        <!-- <h1 class="splashTitle" v-bind:style="{color:this.yearColor, 'border-color':this.yearColor,'transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-webkit-transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-ms-transform:':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)'}" v-html="yearTitle"></h1> -->
 
-          <h1 class="splashTitle" v-bind:style="{color:this.yearColor}" v-html="yearTitle"></h1>
+        <h1 class="splashTitle" v-bind:style="{color:this.yearColor}" v-html="yearTitle"></h1>
       </router-link>
     </div>
 
-    <div v-if="featuredimageSplash" v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
-    </div>
-
   </div>
 
-  <div class="splashImage">
+  <div class="splashExcerpt">
 
-    <!-- <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
-        </div> -->
-    <div v-if="!featuredimageSplash" v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
+    <div v-bind:style="{color:this.yearColor}" v-html="splashExcerpt" class="blurbWrap">
     </div>
-    <div v-if="featuredimageSplash" class="splashImageInner">
-      <img v-bind:src="featuredimageSplash.sizes.large" />
-    </div>
+
   </div>
 
   <div v-bind:style="{color:this.yearColor, 'border-color':this.yearColor}" class="navigationWrap">
-    <div v-bind:style="{'border-color':this.yearColor}" class="border-right singleContentInnerLinkOuter" v-on:click="goToGraduates()">
+    <div v-bind:style="{'border-color':this.yearColor}" class="border-right singleContentInnerLinkOuter singleContentInner" v-on:click="goToGraduates()">
       <!-- <span>Graduates ↓</span> -->
       <span>Graduates</span>
     </div>
     <div v-bind:style="{color:this.yearColor, 'border-color':this.yearColor}" class="singleContentInnerLinkOuter">
       <template v-if="this.splashProgramme">
-        <div @click="expandedProgramme=!expandedProgramme" class="singleContentInnerLink border-right" v-bind:style="{'border-color':this.yearColor}">
+        <div @click="goToProgram()" class="singleContentInner singleContentInnerLink border-right" v-bind:style="{'border-color':this.yearColor}">
           <div>
             <span><span>Programme</span></span>
           </div>
         </div>
-        <div class="singleContentInnerLink">
+        <div class="singleContentInnerLink singleContentInner">
           <!-- <router-link v-bind:to="'year/'+year">
             <div>
               <span><span>Read More</span></span>
@@ -78,14 +72,27 @@
     </div>
 
   </div>
-  <div v-if="expandedProgramme" class="splashProgramme" v-bind:style="{'color':this.yearColor, 'border-color':this.yearColor}" v-html="splashProgramme">
 
+
+  <div class="splashProgramme" v-bind:class="{ expanded: expandedProgramme }" v-bind:style="{'color':this.yearColor, 'border-color': expandedProgramme ? this.yearColor:''}" >
+    <div class="splashProgrammeInner"  v-bind:style="{'color':this.yearColor, 'border-color':this.yearColor}" >
+      <div v-if="featuredimageSplash" class="splashImageInner">
+        <img v-bind:src="featuredimageSplash.sizes.large" />
+      </div>
+      <div class="programmerInner" v-html="splashProgramme">
+
+      </div>
+
+    </div>
   </div>
 
 </div>
 </template>
 
 <script>
+
+import offset from 'document-offset'
+
 export default {
   props: ['categorylink', 'listpostId', 'yearColor', 'year', 'yearviewIndex'],
   components: {
@@ -99,6 +106,8 @@ export default {
     return {
       hidePostList: false,
       yearTitle: '',
+      yearTitleSkew: '0',
+      yearTitleRotate: '0',
       featuredimageSplash: '',
       splashExcerpt: '',
       splashProgramme: '',
@@ -114,6 +123,8 @@ export default {
     this.$http.get(this.categorylink).then(function(response) {
       if (response.body.length > 0) {
         this.yearTitle = response.body[0].title.rendered
+        this.yearTitleSkew = response.body[0].acf.title_skew.toString()
+        this.yearTitleRotate = response.body[0].acf.title_rotate.toString()
         this.featuredimageSplash = response.body[0].acf.featuredimage
         this.splashExcerpt = response.body[0].acf.excerpt
         this.splashProgramme = response.body[0].acf.programme
@@ -126,6 +137,15 @@ export default {
 
 
   methods: {
+
+    goToProgram: function(){
+      this.expandedProgramme=!this.expandedProgramme;
+      console.log()
+      if(this.expandedProgramme){
+        this.$SmoothScroll(offset(this.$el.querySelector('.splashProgramme')).top - 119, 500);
+      }
+
+    },
     expandSplash: function(id) {
       this.showSplash = !this.showSplash
     },
@@ -152,19 +172,54 @@ export default {
     // color: $mainBackground;
     color: $mainBackgroundBlack;
 
-    max-height: 0;
+    // max-height: 0;
     overflow: hidden;
     // border-top: 0 solid black;
     width: 100%;
-    -webkit-transition: max-height 0.5s, border 0.5s;
-    -moz-transition: max-height 0.5s, border 0.5s;
-    transition: max-height 0.5s, border 0.5s;
+
+    .splashExcerpt {
+        width: 50%;
+        float: right;
+        @include media("<tablet") {
+            width: 100%;
+
+        }
+        p {
+            margin: 0;
+
+        }
+    }
 
     .splashProgramme {
-        padding: $mainPadding;
+
+      max-height: 0;
+
+      overflow: hidden;
+      -webkit-transition: max-height 0.5s, border 0.5s, border-color 0s;
+      -moz-transition: max-height 0.5s, border 0.5s, border-color 0s;
+      transition: max-height 0.5s, border 0.5s, border-color 0s;
+      //position: relative;
+      &.expanded {
+          max-height: 3000px;
+          -webkit-transition: max-height 0.8s, border 0.1s, border-color 0s;
+          -moz-transition: max-height 0.8s, border 0.1s, border-color 0s;
+          transition: max-height 0.8s, border 0.1s, border-color 0s;
+          transition-delay: 0.1s;
+
+      }
+
+      .splashProgrammeInner{
+        margin: $mainPadding;
+        display: table;
+        width: 100%;
+
+      }
+
         border-top: $mainBorderStyle;
         color: $mainBackgroundBlack;
         clear: both;
+        display: block;
+        width: 100%;
         margin: 0;
         p {
             margin: 0;
@@ -176,38 +231,51 @@ export default {
         }
         @include media("<tablet") {
             font-size: $thirdFontSizeTablet;
-            border-top: 0;
+            // border-top: 0;
 
         }
-    }
+        .programmerInner {
+            float: left;
 
-    .splashImage {
-        width: 50%;
-        @include media("<tablet") {
-            width: 100%;
+            width: 50%;
+            padding-right: $mainPadding;
+            @include media("<tablet") {
+                width: 100%;
+                padding-right: 0;
+
+            }
 
         }
-        position: relative;
-        // position: absolute;
-        float: right;
-        //
+
         .splashImageInner {
             // position: absolute;
             // height: 100%;
             // width: 100%;
-            margin: $mainPadding;
-
-            width: calc(100% - 40px);
-            img {
+            display: inline;
+            // padding: $mainPadding;
+            float: right;
+            @include media("<tablet") {
                 width: 100%;
-            }
+                margin-bottom: $mainPadding;
 
+            }
+            width: 50%;
+            img {
+                  display: block;
+                // padding-left: $mainPadding;
+                width: calc(100% - 40px);
+                @include media("<tablet") {
+                    padding-left: 0;
+
+                }
+            }
             //   background: url("http://api-placeholder.template-studio.nl/wp-content/uploads/2017/04/Opening1-1024x683.jpg");
             //   background-size: cover;
             //   background-repeat: no-repeat;
             //   background-position: 50% 50%;
 
         }
+
     }
 
     .splashTextContentWrap {
@@ -224,7 +292,7 @@ export default {
         padding: $mainPadding;
         @include media("<tablet") {
             // padding-bottom: 0;
-            padding-bottom: $mainPadding*2;
+            padding-bottom: $mainPadding;
 
         }
 
@@ -268,7 +336,6 @@ export default {
                 line-height: 32px;
             }
         }
-
 
         p {
             // color: $mainBackground;
@@ -325,7 +392,21 @@ export default {
                 }
 
             }
+
+
         }
+
+
+      .singleContentInner{
+        &:hover{
+          // background: red;
+          color: $mainBackgroundBlack;
+          // border-bottom: $mainBorderStyle;
+          // margin-bottom: -1px;
+          border-color:$mainBackgroundBlack !important;
+        }
+      }
+
 
         .singleContentInnerLink {
             text-align: center;
@@ -339,13 +420,13 @@ export default {
         }
     }
 
-    &.expanded {
-        max-height: 10000px;
-        // border-top: $mainBorderStyle;
-        -webkit-transition: max-height 0.5s, border 0.5s;
-        -moz-transition: max-height 0.5s, border 0.5s;
-        transition: max-height 0.5s, border 0.5s;
-    }
+    // &.expanded {
+    //     max-height: 10000px;
+    //     // border-top: $mainBorderStyle;
+    //     -webkit-transition: max-height 0.5s, border 0.5s;
+    //     -moz-transition: max-height 0.5s, border 0.5s;
+    //     transition: max-height 0.5s, border 0.5s;
+    // }
 }
 </style>
 
@@ -362,6 +443,9 @@ export default {
     }
 }
 .blurbWrap {
+    font-weight: 900;
+    line-height: 1.1;
+
     padding: $mainPadding;
     // padding-top: $mainPadding;
 
@@ -383,6 +467,12 @@ export default {
         }
 
         margin: 0;
+        //
+        // font-size: 32px;
+        // @include media("<tablet") {
+        //     font-size: 12px;
+        // }
+
     }
 }
 </style>

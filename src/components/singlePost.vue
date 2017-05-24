@@ -75,14 +75,14 @@ export default {
     },
     getContent: function(id) {
 
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/yearpost/' + id).then(function(response) {
+      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/yearpost/' + id + '?per_page=100&per_page=100').then(function(response) {
         if (this.postJsonContent.length === 0) {
           this.postJsonContent = response.body.acf.text_field
           this.postJsonTitle = response.body.title.rendered
           this.postJsonStudent = response.body.acf.student_name
           this.postJsonContentMedia = response.body.acf.media_field
           this.postJsonAttachedField = response.body.acf.attachment_field
-          this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories/' + response.body.categories[0]).then(function(response) {
+          this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories/' + response.body.categories[0] + '?per_page=100').then(function(response) {
             this.year = response.body.name
             this.yearColor = response.body.acf.yearcolor
             var vm = this

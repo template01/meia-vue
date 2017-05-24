@@ -25,9 +25,12 @@
       <div class="left">
 
         <div class="postcontentWrapperTitle">
-
+<!--
           <p class="splashTitle" v-bind:style="{color:yearColor, 'border-color':yearColor,'transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-webkit-transform':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)', '-ms-transform:':'skewX('+yearTitleSkew+'deg) rotate('+yearTitleRotate+'deg)'}"
-            v-html="postJsonTitle"></p>
+            v-html="postJsonTitle"></p> -->
+
+
+            <p class="splashTitle" v-bind:style="{color:yearColor, 'border-color':yearColor}" v-html="postJsonTitle"></p>
 
         </div>
 
@@ -90,7 +93,7 @@ export default {
 
     getContent: function(yearCategory) {
 
-      this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories?search=' + yearCategory).then(function(response) {
+      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?search=' + yearCategory ).then(function(response) {
         this.$http.get(response.body[0]._links['wp:post_type'][1].href).then(function(response) {
           this.postJsonContent = response.body[0].acf.text_field
           this.postJsonTitle = response.body[0].title.rendered
@@ -104,7 +107,7 @@ export default {
 
 
 
-          this.$http.get('http://api-placeholder.template-studio.nl/wp-json/wp/v2/categories/' + response.body[0].categories[0]).then(function(response) {
+          this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories/' + response.body[0].categories[0]).then(function(response) {
             this.year = response.body.name
             this.yearColor = response.body.acf.yearcolor
 
@@ -283,22 +286,32 @@ export default {
                 padding-top: $mainPadding*2;
             }
 
-            text-align: center;
+            // p {
+            //     width: 75%;
+            //     margin: 0 auto;
+            //     text-align: center;
+            //     margin-top: $mainPadding;
+            //     padding-top: $mainPadding*4.5;
+            //     padding-bottom: $mainPadding*4;
+            //     padding-left: 9%;
+            //     padding-right: 10%;
+            //     border: $mainBorderStyle;
+            //     border-color: blue;
+            //     border-radius: 100%;
+            //     font-size: 64px;
+            //     line-height: 64px;
+            //     font-weight: 900;
+            //     @include media("<tablet") {
+            //         font-size: 32px;
+            //         line-height: 32px;
+            //         margin-bottom: 0;
+            //
+            //     }
+            //     color: $mainBackground;
+            //
+            // }
+
             p {
-              // text-transform: uppercase;
-                width: 75%;
-                margin: 0 auto;
-                text-align: center;
-                margin-top: $mainPadding;
-                padding-top: $mainPadding*4.5;
-                padding-bottom: $mainPadding*4;
-                padding-left: 9%;
-                padding-right: 10%;
-                border: $mainBorderStyle;
-                border-color: blue;
-                border-radius: 100%;
-
-
                 font-size: 64px;
                 line-height: 64px;
                 font-weight: 900;
@@ -312,6 +325,7 @@ export default {
                 color: $mainBackground;
 
             }
+
 
         }
 
