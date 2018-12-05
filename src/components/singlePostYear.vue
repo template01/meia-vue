@@ -93,7 +93,7 @@ export default {
 
     getContent: function(yearCategory) {
 
-      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?search=' + yearCategory ).then(function(response) {
+      this.$http.get(this.$apiUrl+'wp/v2/categories?search=' + yearCategory ).then(function(response) {
         this.$http.get(response.body[0]._links['wp:post_type'][1].href).then(function(response) {
           this.postJsonContent = response.body[0].acf.text_field
           this.postJsonTitle = response.body[0].title.rendered
@@ -107,7 +107,7 @@ export default {
 
 
 
-          this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories/' + response.body[0].categories[0]).then(function(response) {
+          this.$http.get(this.$apiUrl+'wp/v2/categories/' + response.body[0].categories[0]).then(function(response) {
             this.year = response.body.name
             this.yearColor = response.body.acf.yearcolor
 

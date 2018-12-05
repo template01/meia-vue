@@ -48,13 +48,15 @@ export default {
   created: function() {
 
     if (this.gradyears.length === 0) {
-      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/categories?parent=2&per_page=100').then(function(response) {
-        this.gradyears = response.body
-        this.attachExtras()
-        this.goToYear(parseInt(this.$route.query.yearview))
-
-
+      this.$http.get(this.$apiUrl+'wp/v2/categories?slug=graduation-years').then(function(response){
+        const graduationYearsId = response.body[0].id
+        this.$http.get(this.$apiUrl+'wp/v2/categories?parent='+graduationYearsId+'&per_page=100').then(function(response) {
+          this.gradyears = response.body
+          this.attachExtras()
+          this.goToYear(parseInt(this.$route.query.yearview))
+        })
       })
+
 
       // year._links['wp:post_type'][1].href
     }

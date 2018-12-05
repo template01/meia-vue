@@ -113,7 +113,7 @@ export default {
 
 
 
-      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/yearpost/' + id +'?per_page=100').then(function(response) {
+      this.$http.get(this.$apiUrl+'wp/v2/yearpost/' + id +'?per_page=100').then(function(response) {
 
         // if (this.postJsonContent.length === 0) {
 

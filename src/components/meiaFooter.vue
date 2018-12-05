@@ -32,7 +32,7 @@ export default {
   methods: {
     getContent: function(yearCategory) {
 
-      this.$http.get('http://meia.pzwart.nl/backend/wp-json/wp/v2/pages?per_page=100').then(function(response) {
+      this.$http.get(this.$apiUrl+'wp/v2/pages?per_page=100').then(function(response) {
         // this.postJsonTitle = response.body[0].title.rendered
         this.about = response.body[0].acf.about
         this.colophon = response.body[0].acf.colophon
