@@ -93,7 +93,7 @@ export default {
 
     #pzi {
         &:after {
-            content: "Piet Zwart Insititute";
+            content: "Piet Zwart Institute";
         }
         @include media("<tablet") {
             &:after {

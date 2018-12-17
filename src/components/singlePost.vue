@@ -20,13 +20,30 @@
 
 
   </div>
-  <div class="postcontentWrapper" v-bind:style="{background:yearColor}">
+  <div v-if="singleLoaded" class="postcontentWrapper" v-bind:style="{background:yearColor}">
     <div class="left" v-bind:style="{background:yearColor}">
       <p class="postcontentWrapperTitle"><span v-html="postJsonStudent"></span><br /><span v-html="postJsonTitle"></span></p>
       <div class="notTabletView" v-html="postJsonContentMedia"></div>
     </div>
     <div class="right" v-bind:style="{background:yearColor}">
       <div v-html="postJsonContent">
+      </div>
+      <div v-if="postJsonThesis" class="attachments">
+        <p class="title">
+          Thesis:
+        </p>
+        <ul>
+          <li v-if="postJsonThesisUploaded">
+            <span class="attachmentInner">
+              <a target="_blank" v-bind:href="postJsonThesisFile.url">Download</a>
+            </span>
+          </li>
+          <li v-else>
+            <span class="attachmentInner">
+              <a target="_blank" v-bind:href="postJsonThesisLink">Download</a>
+            </span>
+          </li>
+        </ul>
       </div>
       <div v-if="postJsonAttachedField" class="attachments">
         <p class="title">
@@ -75,13 +92,18 @@ export default {
     },
     getContent: function(id) {
 
-      this.$http.get(this.$apiUrl+'wp/v2/yearpost/' + id + '?per_page=100&per_page=100').then(function(response) {
+      this.$http.get(this.$apiUrl+'wp/v2/yearpost/' + id + '?per_page=100').then(function(response) {
         if (this.postJsonContent.length === 0) {
           this.postJsonContent = response.body.acf.text_field
           this.postJsonTitle = response.body.title.rendered
           this.postJsonStudent = response.body.acf.student_name
           this.postJsonContentMedia = response.body.acf.media_field
           this.postJsonAttachedField = response.body.acf.attachment_field
+          this.postJsonThesis = response.body.acf.attach_thesis.length > 0 ? true : false
+          this.postJsonThesisUploaded = response.body.acf.thesis_field_choice === "Upload file" ? true : false
+          this.postJsonThesisFile = response.body.acf.thesis_field_file
+          this.postJsonThesisLink = response.body.acf.thesis_field_link
+
           this.$http.get(this.$apiUrl+'wp/v2/categories/' + response.body.categories[0] + '?per_page=100').then(function(response) {
             this.year = response.body.name
             this.yearColor = response.body.acf.yearcolor
